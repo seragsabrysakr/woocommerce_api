@@ -1,30 +1,36 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 
+part 'product_item_tag.g.dart';
+
+@JsonSerializable()
 class WooProductItemTag {
   /// Tag ID.
+  @JsonKey(name: 'id')
   final int? id;
 
   /// Tag name.
+  @JsonKey(name: 'name')
   final String? name;
 
   /// Tag slug.
+  @JsonKey(name: 'slug')
   final String? slug;
 
-  WooProductItemTag(this.id, this.name, this.slug);
+  WooProductItemTag({
+    this.id,
+    this.name,
+    this.slug,
+  });
 
-  WooProductItemTag.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        slug = json['slug'];
+  factory WooProductItemTag.fromJson(Map<String, dynamic> json) =>
+      _$WooProductItemTagFromJson(json);
 
-  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'slug': slug};
+  Map<String, dynamic> toJson() => _$WooProductItemTagToJson(this);
 
-  @override
-  toString() => 'Tag: $name';
-
-  factory WooProductItemTag.fake() => WooProductItemTag(
-        FakeHelper.integer(),
-        FakeHelper.word(),
-        FakeHelper.url(),
+  static WooProductItemTag fake() => WooProductItemTag(
+        id: FakeHelper.integer(),
+        name: FakeHelper.word(),
+        slug: FakeHelper.word(),
       );
 }

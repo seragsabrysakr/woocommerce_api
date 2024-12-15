@@ -1,64 +1,42 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
+
+part 'category_links.g.dart';
+
+@JsonSerializable()
 class WooProductCategoryLinks {
-  List<WooProductCategorySelf>? self;
-  List<WooProductCategoryCollection>? collection;
+  /// List of self links.
+  @JsonKey(name: 'self')
+  final List<Map<String, dynamic>>? self;
 
-  WooProductCategoryLinks({this.self, this.collection});
+  /// List of collection links.
+  @JsonKey(name: 'collection')
+  final List<Map<String, dynamic>>? collection;
 
-  WooProductCategoryLinks.fromJson(Map<String, dynamic> json) {
-    if (json['self'] != null) {
-      self = <WooProductCategorySelf>[];
-      json['self'].forEach((v) {
-        self!.add(WooProductCategorySelf.fromJson(v));
-      });
-    }
-    if (json['collection'] != null) {
-      collection = <WooProductCategoryCollection>[];
-      json['collection'].forEach((v) {
-        collection!.add(WooProductCategoryCollection.fromJson(v));
-      });
-    }
-  }
+  /// List of up links.
+  @JsonKey(name: 'up')
+  final List<Map<String, dynamic>>? up;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (self != null) {
-      data['self'] = self!.map((v) => v.toJson()).toList();
-    }
-    if (collection != null) {
-      data['collection'] = collection!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
+  WooProductCategoryLinks({
+    this.self,
+    this.collection,
+    this.up,
+  });
 
-class WooProductCategorySelf {
-  String? href;
+  factory WooProductCategoryLinks.fromJson(Map<String, dynamic> json) =>
+      _$WooProductCategoryLinksFromJson(json);
 
-  WooProductCategorySelf({this.href});
+  Map<String, dynamic> toJson() => _$WooProductCategoryLinksToJson(this);
 
-  WooProductCategorySelf.fromJson(Map<String, dynamic> json) {
-    href = json['href'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['href'] = href;
-    return data;
-  }
-}
-
-class WooProductCategoryCollection {
-  String? href;
-
-  WooProductCategoryCollection({this.href});
-
-  WooProductCategoryCollection.fromJson(Map<String, dynamic> json) {
-    href = json['href'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['href'] = href;
-    return data;
-  }
+  static WooProductCategoryLinks fake() => WooProductCategoryLinks(
+        self: [
+          {'href': FakeHelper.url()}
+        ],
+        collection: [
+          {'href': FakeHelper.url()}
+        ],
+        up: [
+          {'href': FakeHelper.url()}
+        ],
+      );
 }

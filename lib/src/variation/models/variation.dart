@@ -1,256 +1,238 @@
-import 'package:woocommerce_flutter_api/src/base/base.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
-import 'package:woocommerce_flutter_api/src/product/enums/enums.dart';
-import 'package:woocommerce_flutter_api/src/product/models/models.dart';
+import 'package:woocommerce_flutter_api/src/product/models/product_dimension.dart';
+import 'package:woocommerce_flutter_api/src/product/models/product_download.dart';
 
+part 'variation.g.dart';
+
+@JsonSerializable()
 class WooProductVariation {
   /// Unique identifier for the resource.
-  int? id;
+  @JsonKey(name: 'id')
+  final int? id;
 
   /// The date the variation was created, in the site's timezone.
-  DateTime? dateCreated;
-
-  /// The date the variation was created, as GMT.
-  DateTime? dateCreatedGmt;
+  @JsonKey(name: 'date_created')
+  final String? dateCreated;
 
   /// The date the variation was last modified, in the site's timezone.
-  DateTime? dateModified;
-
-  /// The date the variation was last modified, as GMT.
-  DateTime? dateModifiedGmt;
+  @JsonKey(name: 'date_modified')
+  final String? dateModified;
 
   /// Variation description.
-  String? description;
+  @JsonKey(name: 'description')
+  final String? description;
 
   /// Variation URL.
-  String? permalink;
+  @JsonKey(name: 'permalink')
+  final String? permalink;
 
   /// Unique identifier.
-  String? sku;
+  @JsonKey(name: 'sku')
+  final String? sku;
 
   /// Current variation price.
-  double? price;
+  @JsonKey(name: 'price')
+  final String? price;
 
   /// Variation regular price.
-  double? regularPrice;
+  @JsonKey(name: 'regular_price')
+  final String? regularPrice;
 
   /// Variation sale price.
-  double? salePrice;
+  @JsonKey(name: 'sale_price')
+  final String? salePrice;
 
   /// Start date of sale price, in the site's timezone.
-  DateTime? dateOnSaleFrom;
-
-  /// Start date of sale price, as GMT.
-  DateTime? dateOnSaleFromGmt;
+  @JsonKey(name: 'date_on_sale_from')
+  final String? dateOnSaleFrom;
 
   /// End date of sale price, in the site's timezone.
-  DateTime? dateOnSaleTo;
-
-  /// End date of sale price, as GMT.
-  DateTime? dateOnSaleToGmt;
+  @JsonKey(name: 'date_on_sale_to')
+  final String? dateOnSaleTo;
 
   /// Shows if the variation is on sale.
-  bool? onSale;
-
-  /// Variation status. Options: draft, pending, private and publish. Default is publish.
-  WooProductStatus? status;
+  @JsonKey(name: 'on_sale')
+  final bool? onSale;
 
   /// Shows if the variation can be bought.
-  bool? purchasable;
+  @JsonKey(name: 'purchasable')
+  final bool? purchasable;
 
-  /// If the variation is virtual. Default is false.
-  bool? virtual;
+  /// If the variation is virtual.
+  @JsonKey(name: 'virtual')
+  final bool? virtual;
 
-  /// If the variation is downloadable. Default is false.
-  bool? downloadable;
+  /// If the variation is downloadable.
+  @JsonKey(name: 'downloadable')
+  final bool? downloadable;
 
-  /// If the variation is downloadable. Default is false.
-  List<WooProductDownload> downloads;
+  /// List of downloadable files.
+  @JsonKey(name: 'downloads')
+  final List<WooProductDownload>? downloads;
 
-  /// Number of times downloadable files can be downloaded after purchase. Default is -1.
-  int? downloadLimit;
+  /// Number of times downloadable files can be downloaded after purchase.
+  @JsonKey(name: 'download_limit')
+  final int? downloadLimit;
 
-  /// Number of days until access to downloadable files expires. Default is -1.
-  int? downloadExpiry;
+  /// Number of days until access to downloadable files expires.
+  @JsonKey(name: 'download_expiry')
+  final int? downloadExpiry;
 
-  /// Tax status. Options: taxable, shipping and none. Default is taxable.
-  WooProductTaxStatus? taxStatus;
+  /// Tax status.
+  @JsonKey(name: 'tax_status')
+  final String? taxStatus;
 
   /// Tax class.
-  String? taxClass;
+  @JsonKey(name: 'tax_class')
+  final String? taxClass;
 
-  /// Stock management at variation level. Default is false.
-  bool? manageStock;
+  /// Stock management at variation level.
+  @JsonKey(name: 'manage_stock')
+  final bool? manageStock;
 
   /// Stock quantity.
-  int? stockQuantity;
+  @JsonKey(name: 'stock_quantity')
+  final int? stockQuantity;
 
-  /// Controls the stock status of the product. Options: instock, outofstock, onbackorder. Default is instock.
-  WooProductStockStatus? stockStatus;
+  /// Controls whether or not the variation is listed as "in stock" or "out of stock" on the frontend.
+  @JsonKey(name: 'stock_status')
+  final String? stockStatus;
 
-  /// If managing stock, this controls if backorders are allowed. Options: no, notify and yes. Default is no.
-  WooProductBackorder? backorders;
+  /// If managing stock, this controls if backorders are allowed.
+  @JsonKey(name: 'backorders')
+  final String? backorders;
 
   /// Shows if backorders are allowed.
-  bool? backordersAllowed;
+  @JsonKey(name: 'backorders_allowed')
+  final bool? backordersAllowed;
 
   /// Shows if the variation is on backordered.
-  bool? backordered;
+  @JsonKey(name: 'backordered')
+  final bool? backordered;
 
   /// Variation weight.
-  String? weight;
+  @JsonKey(name: 'weight')
+  final String? weight;
 
   /// Variation dimensions.
-  WooProductDimension dimensions;
+  @JsonKey(name: 'dimensions')
+  final WooProductDimension? dimensions;
 
   /// Shipping class slug.
-  String? shippingClass;
+  @JsonKey(name: 'shipping_class')
+  final String? shippingClass;
 
   /// Shipping class ID.
-  int? shippingClassId;
+  @JsonKey(name: 'shipping_class_id')
+  final int? shippingClassId;
 
   /// Variation image data.
-  WooProductImage? image;
+  @JsonKey(name: 'image')
+  final Map<String, dynamic>? image;
 
   /// List of attributes.
-  List<WooProductItemAttribute> attributes;
+  @JsonKey(name: 'attributes')
+  final List<Map<String, dynamic>>? attributes;
 
-  /// Menu order, used to custom sort products.
-  int? menuOrder;
+  /// Menu order, used to custom sort variations.
+  @JsonKey(name: 'menu_order')
+  final int? menuOrder;
 
   /// Meta data.
-  List<WooMetaData> metaData;
+  @JsonKey(name: 'meta_data')
+  final List<Map<String, dynamic>>? metaData;
 
-  WooProductVariation(
-      {this.id,
-      this.dateCreated,
-      this.dateCreatedGmt,
-      this.dateModified,
-      this.dateModifiedGmt,
-      this.description,
-      this.permalink,
-      this.sku,
-      this.price,
-      this.attributes = const [],
-      this.regularPrice,
-      this.salePrice,
-      this.dateOnSaleFrom,
-      this.dateOnSaleFromGmt,
-      this.dateOnSaleTo,
-      this.dateOnSaleToGmt,
-      this.onSale,
-      this.status,
-      this.purchasable,
-      this.virtual,
-      this.downloadable,
-      this.downloads = const [],
-      this.downloadLimit,
-      this.downloadExpiry,
-      this.taxStatus,
-      this.taxClass,
-      this.manageStock,
-      this.stockQuantity,
-      this.stockStatus,
-      this.backorders,
-      this.backordersAllowed,
-      this.backordered,
-      this.weight,
-      this.shippingClass,
-      this.shippingClassId,
-      this.menuOrder,
-      this.dimensions = const WooProductDimension(),
-      this.metaData = const [],
-      this.image});
+  WooProductVariation({
+    this.id,
+    this.dateCreated,
+    this.dateModified,
+    this.description,
+    this.permalink,
+    this.sku,
+    this.price,
+    this.regularPrice,
+    this.salePrice,
+    this.dateOnSaleFrom,
+    this.dateOnSaleTo,
+    this.onSale,
+    this.purchasable,
+    this.virtual,
+    this.downloadable,
+    this.downloads,
+    this.downloadLimit,
+    this.downloadExpiry,
+    this.taxStatus,
+    this.taxClass,
+    this.manageStock,
+    this.stockQuantity,
+    this.stockStatus,
+    this.backorders,
+    this.backordersAllowed,
+    this.backordered,
+    this.weight,
+    this.dimensions,
+    this.shippingClass,
+    this.shippingClassId,
+    this.image,
+    this.attributes,
+    this.menuOrder,
+    this.metaData,
+  });
 
-  WooProductVariation.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        permalink = json['permalink'],
-        status = json['status'],
-        description = json['description'],
-        dateCreated = DateTime.parse(json['date_created']),
-        dateCreatedGmt = DateTime.parse(json['date_modified_gmt']),
-        dateModified = DateTime.parse(json['date_modified']),
-        dateModifiedGmt = DateTime.parse(json['date_created_gmt']),
-        dateOnSaleFrom = DateTime.parse(json['date_on_sale_from']),
-        dateOnSaleFromGmt = DateTime.parse(json['date_on_sale_from_gmt']),
-        dateOnSaleTo = DateTime.parse(json['date_on_sale_to']),
-        dateOnSaleToGmt = DateTime.parse(json['date_on_sale_to_gmt']),
-        sku = json['sku'],
-        price = double.tryParse(json['price']),
-        regularPrice = double.tryParse(json['regular_price']),
-        salePrice = double.tryParse(json['sale_price']),
-        onSale = json['on_sale'],
-        purchasable = json['purchasable'],
-        virtual = json['virtual'],
-        downloadable = json['downloadable'],
-        downloads = (json['downloads'] as List)
-            .map((i) => WooProductDownload.fromJson(i))
-            .toList(),
-        downloadLimit = json['download_limit'],
-        downloadExpiry = json['download_expiry'],
-        taxStatus = json['tax_status'],
-        taxClass = json['tax_class'],
-        manageStock =
-            (json['manage_stock'] != null && json['manage_stock'] is bool)
-                ? json['manage_stock']
-                : false,
-        stockQuantity = json['stock_quantity'],
-        stockStatus = json['stock_status'],
-        backorders = json['backorders'],
-        backordersAllowed = json['backorders_allowed'],
-        backordered = json['backordered'],
-        weight = json['weight'],
-        image = WooProductImage.fromJson(json['image']),
-        dimensions = WooProductDimension.fromJson(json['dimensions']),
-        shippingClass = json['shipping_class'],
-        shippingClassId = json['shipping_class_id'],
-        menuOrder = json['menu_order'],
-        attributes = (json['attributes'] as List)
-            .map((i) => WooProductItemAttribute.fromJson(i))
-            .toList(),
-        metaData = (json['meta_data'] as List)
-            .map((i) => WooMetaData.fromJson(i))
-            .toList();
+  factory WooProductVariation.fromJson(Map<String, dynamic> json) =>
+      _$WooProductVariationFromJson(json);
 
-  factory WooProductVariation.fake() => WooProductVariation(
+  Map<String, dynamic> toJson() => _$WooProductVariationToJson(this);
+
+  static WooProductVariation fake() => WooProductVariation(
         id: FakeHelper.integer(),
+        dateCreated: FakeHelper.word(),
+        dateModified: FakeHelper.word(),
+        description: FakeHelper.word(),
         permalink: FakeHelper.url(),
-        status: WooProductStatus.fake(),
-        description: FakeHelper.sentence(),
         sku: FakeHelper.word(),
-        price: FakeHelper.decimal(),
-        regularPrice: FakeHelper.decimal(),
-        salePrice: FakeHelper.decimal(),
+        price: FakeHelper.decimal().toString(),
+        regularPrice: FakeHelper.decimal().toString(),
+        salePrice: FakeHelper.decimal().toString(),
+        dateOnSaleFrom: FakeHelper.word(),
+        dateOnSaleTo: FakeHelper.word(),
         onSale: FakeHelper.boolean(),
         purchasable: FakeHelper.boolean(),
         virtual: FakeHelper.boolean(),
         downloadable: FakeHelper.boolean(),
-        downloads: FakeHelper.list(() => WooProductDownload.fake()),
+        downloads: List.generate(3, (index) => WooProductDownload.fake()),
         downloadLimit: FakeHelper.integer(),
         downloadExpiry: FakeHelper.integer(),
-        taxStatus: WooProductTaxStatus.fake(),
+        taxStatus: FakeHelper.word(),
         taxClass: FakeHelper.word(),
         manageStock: FakeHelper.boolean(),
         stockQuantity: FakeHelper.integer(),
-        stockStatus: WooProductStockStatus.fake(),
-        backorders: WooProductBackorder.fake(),
+        stockStatus: FakeHelper.word(),
+        backorders: FakeHelper.word(),
         backordersAllowed: FakeHelper.boolean(),
         backordered: FakeHelper.boolean(),
         weight: FakeHelper.decimal().toString(),
         dimensions: WooProductDimension.fake(),
         shippingClass: FakeHelper.word(),
         shippingClassId: FakeHelper.integer(),
-        image: WooProductImage.fake(),
-        attributes: FakeHelper.list(() => WooProductItemAttribute.fake()),
+        image: {'url': FakeHelper.url()},
+        attributes: List.generate(
+          3,
+          (index) => {
+            'id': FakeHelper.integer(),
+            'name': FakeHelper.word(),
+            'option': FakeHelper.word(),
+          },
+        ),
         menuOrder: FakeHelper.integer(),
-        metaData: FakeHelper.list(() => WooMetaData.fake()),
-        dateCreated: FakeHelper.datetime(),
-        dateCreatedGmt: FakeHelper.datetime(),
-        dateModified: FakeHelper.datetime(),
-        dateModifiedGmt: FakeHelper.datetime(),
-        dateOnSaleFrom: FakeHelper.datetime(),
-        dateOnSaleFromGmt: FakeHelper.datetime(),
-        dateOnSaleTo: FakeHelper.datetime(),
-        dateOnSaleToGmt: FakeHelper.datetime(),
+        metaData: List.generate(
+          3,
+          (index) => {
+            'id': FakeHelper.integer(),
+            'key': FakeHelper.word(),
+            'value': FakeHelper.word(),
+          },
+        ),
       );
 }

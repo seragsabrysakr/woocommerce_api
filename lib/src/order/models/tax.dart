@@ -1,30 +1,41 @@
-import 'package:json_reader/json_reader.dart';
-import 'package:woocommerce_flutter_api/src/base/models/metadata.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
+ import 'package:woocommerce_flutter_api/src/base/models/metadata.dart';
 
+part 'tax.g.dart';
+
+@JsonSerializable()
 class WooTax {
   /// Item ID.
+  @JsonKey(name: 'id')
   final int? id;
 
   /// Tax rate code.
+  @JsonKey(name: 'rate_code')
   final String? rateCode;
 
   /// Tax rate ID.
+  @JsonKey(name: 'rate_id')
   final String? rateId;
 
   /// Tax rate label.
+  @JsonKey(name: 'label')
   final String? label;
 
   /// Show if is a compound tax rate.
+  @JsonKey(name: 'compound')
   final bool? compound;
 
   /// Tax total (not including shipping taxes).
+  @JsonKey(name: 'tax_total')
   final double? taxTotal;
 
   /// Shipping tax total.
+  @JsonKey(name: 'shipping_tax_total')
   final double? shippingTaxTotal;
 
   /// Meta data.
+  @JsonKey(name: 'meta_data')
   final List<WooMetaData>? metaData;
 
   WooTax({
@@ -38,37 +49,11 @@ class WooTax {
     this.metaData,
   });
 
-  factory WooTax.fromJson(JsonReader json) => WooTax(
-        id: json['id'].asIntOrNull(),
-        rateCode: json['rate_code'].asStringOrNull(),
-        rateId: json['rate_id'].asStringOrNull(),
-        label: json['label'].asStringOrNull(),
-        compound: bool.tryParse(json['compound'].asString()),
-        taxTotal: double.tryParse(json['tax_total'].asString()),
-        shippingTaxTotal:
-            double.tryParse(json['shipping_tax_total'].asString()),
-        metaData: json['meta_data']
-            .asList()
-            .map((i) => WooMetaData.fromJson(i))
-            .toList(),
-      );
+  factory WooTax.fromJson(Map<String, dynamic> json) => _$WooTaxFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['rate_code'] = rateCode;
-    data['rate_id'] = rateId;
-    data['label'] = label;
-    data['compound'] = compound;
-    data['tax_total'] = taxTotal;
-    data['shipping_tax_total'] = shippingTaxTotal;
-    if (metaData != null) {
-      data['meta_data'] = metaData!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$WooTaxToJson(this);
 
-  factory WooTax.fake() => WooTax(
+  static WooTax fake() => WooTax(
         id: FakeHelper.integer(),
         rateCode: FakeHelper.word(),
         rateId: FakeHelper.integer().toString(),

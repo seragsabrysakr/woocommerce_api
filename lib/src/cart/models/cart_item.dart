@@ -1,36 +1,49 @@
 import 'package:faker/faker.dart';
-import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
+part 'cart_item.g.dart';
+
+@JsonSerializable()
 class WooCartItem {
   /// Cart Item Key.
+  @JsonKey(name: 'key')
   String? key;
 
   /// Product ID.
+  @JsonKey(name: 'id')
   int? id;
 
   /// Cart Item quantity.
+  @JsonKey(name: 'quantity')
   int? quantity;
 
   /// Cart Item name.
+  @JsonKey(name: 'name')
   String? name;
 
   /// Unique identifier.
+  @JsonKey(name: 'sku')
   String? sku;
 
   /// Product URL.
+  @JsonKey(name: 'permalink')
   String? permalink;
 
   /// Cart Item images.
+  @JsonKey(name: 'images')
   List<WooProductImage>? images;
 
   /// Cart Item price.
+  @JsonKey(name: 'price')
   double? price;
 
   /// Cart Item line price.
+  @JsonKey(name: 'line_price')
   double? linePrice;
 
   /// Cart Item variations.
+  @JsonKey(name: 'variation')
   List<int>? variations;
 
   WooCartItem({
@@ -46,55 +59,23 @@ class WooCartItem {
     this.variations,
   });
 
-  WooCartItem.fromJson(Map<String, dynamic> json) {
-    key = json['key'];
-    id = json['id'];
-    quantity = json['quantity'];
-    name = json['name'];
-    sku = json['sku'];
-    permalink = json['permalink'];
-    if (json['images'] != null) {
-      images = <WooProductImage>[];
-      json['images'].forEach((v) {
-        images!.add(WooProductImage.fromJson(v));
-      });
-    }
-    price = double.tryParse(json['price']);
-    linePrice = double.tryParse(json['line_price']);
-    if (json['variation'] != null) {
-      variations = <int>[];
-      json['variation'].forEach((v) {
-        variations!.add(v);
-      });
-    }
+  factory WooCartItem.fromJson(Map<String, dynamic> json) =>
+      _$WooCartItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WooCartItemToJson(this);
+
+  static WooCartItem fake() {
+    return WooCartItem(
+      key: FakeHelper.word(),
+      id: FakeHelper.integer(),
+      quantity: FakeHelper.integer(),
+      name: faker.food.dish(),
+      sku: FakeHelper.word(),
+      permalink: faker.internet.uri('https'),
+      images: List.generate(3, (index) => WooProductImage.fake()),
+      price: FakeHelper.decimal(),
+      linePrice: FakeHelper.decimal(),
+      variations: FakeHelper.listOfIntegers(),
+    );
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['key'] = key;
-    data['id'] = id;
-    data['quantity'] = quantity;
-    data['name'] = name;
-    data['sku'] = sku;
-    data['permalink'] = permalink;
-    data['price'] = price;
-    data['line_price'] = linePrice;
-    data['variation'] = variations;
-
-    return data;
-  }
-
-  factory WooCartItem.fake() => WooCartItem(
-        id: FakeHelper.integer(),
-        key: Faker().guid.guid(),
-        name: FakeHelper.word(),
-        permalink: FakeHelper.url(),
-        price: FakeHelper.decimal(),
-        quantity: FakeHelper.integer(),
-        sku: Faker().guid.guid(),
-        linePrice: FakeHelper.decimal(),
-        images: FakeHelper.list(() => WooProductImage.fake()),
-        variations: FakeHelper.listOfIntegers(),
-      );
 }

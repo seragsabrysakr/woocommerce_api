@@ -1,50 +1,71 @@
-import 'package:json_reader/json_reader.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/base/models/metadata.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 import 'package:woocommerce_flutter_api/src/order/models/tax.dart';
 
+part 'line_item.g.dart';
+
+@JsonSerializable()
 class WooLineItem {
   /// Item ID.
-  int? id;
+  @JsonKey(name: 'id')
+  final int? id;
 
   /// Product name.
-  String? name;
+  @JsonKey(name: 'name')
+  final String? name;
 
   /// Product ID.
-  int? productId;
+  @JsonKey(name: 'product_id')
+  final int? productId;
 
   /// Variation ID, if applicable.
-  int? variationId;
+  @JsonKey(name: 'variation_id')
+  final int? variationId;
 
   /// Quantity ordered.
-  int? quantity;
+  @JsonKey(name: 'quantity')
+  final int? quantity;
 
-  /// Slug of the tax class of product.
-  String? taxClass;
+  /// Tax class of product.
+  @JsonKey(name: 'tax_class')
+  final String? taxClass;
 
   /// Line subtotal (before discounts).
-  double? subtotal;
+  @JsonKey(name: 'subtotal')
+  final String? subtotal;
 
   /// Line subtotal tax (before discounts).
-  double? subtotalTax;
+  @JsonKey(name: 'subtotal_tax')
+  final String? subtotalTax;
 
   /// Line total (after discounts).
-  double? total;
+  @JsonKey(name: 'total')
+  final String? total;
 
   /// Line total tax (after discounts).
-  double? totalTax;
+  @JsonKey(name: 'total_tax')
+  final String? totalTax;
 
   /// Line taxes.
-  List<WooTax>? taxes;
+  @JsonKey(name: 'taxes')
+  final List<WooTax>? taxes;
 
   /// Meta data.
-  List<WooMetaData>? metaData;
+  @JsonKey(name: 'meta_data')
+  final List<WooMetaData>? metaData;
 
   /// Product SKU.
-  String? sku;
+  @JsonKey(name: 'sku')
+  final String? sku;
 
   /// Product price.
-  double? price;
+  @JsonKey(name: 'price')
+  final double? price;
+
+  /// Parent order ID.
+  @JsonKey(name: 'parent_name')
+  final String? parentName;
 
   WooLineItem({
     this.id,
@@ -61,66 +82,29 @@ class WooLineItem {
     this.metaData,
     this.sku,
     this.price,
+    this.parentName,
   });
 
-  WooLineItem.fromJson(JsonReader json) {
-    id = json['id'].asIntOrNull();
-    name = json['name'].asStringOrNull();
-    productId = json['product_id'].asIntOrNull();
-    variationId = json['variation_id'].asIntOrNull();
-    quantity = json['quantity'].asIntOrNull();
-    taxClass = json['tax_class'].asStringOrNull();
-    subtotal = double.tryParse(json['subtotal'].asString());
-    subtotalTax = double.tryParse(json['subtotal_tax'].asString());
-    total = double.tryParse(json['total'].asString());
-    totalTax = double.tryParse(json['total_tax'].asString());
-    taxes = json['taxes'].asList().map((i) => WooTax.fromJson(i)).toList();
-    metaData =
-        json['meta_data'].asList().map((i) => WooMetaData.fromJson(i)).toList();
-    sku = json['sku'].asStringOrNull();
-    price = double.tryParse(json['price'].asString());
-  }
+  factory WooLineItem.fromJson(Map<String, dynamic> json) =>
+      _$WooLineItemFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['product_id'] = productId;
-    data['variation_id'] = variationId;
-    data['quantity'] = quantity;
-    data['tax_class'] = taxClass;
-    data['subtotal'] = subtotal;
-    data['subtotal_tax'] = subtotalTax;
-    data['total'] = total;
-    data['total_tax'] = totalTax;
-    if (taxes != null) {
-      data['taxes'] = taxes!.map((v) => v.toJson()).toList();
-    }
-    if (metaData != null) {
-      data['meta_data'] = metaData!.map((v) => v.toJson()).toList();
-    }
-    data['sku'] = sku;
-    data['price'] = price;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$WooLineItemToJson(this);
 
-  @override
-  toString() => toJson().toString();
-
-  factory WooLineItem.fake() => WooLineItem(
+  static WooLineItem fake() => WooLineItem(
         id: FakeHelper.integer(),
         name: FakeHelper.word(),
         productId: FakeHelper.integer(),
         variationId: FakeHelper.integer(),
         quantity: FakeHelper.integer(),
         taxClass: FakeHelper.word(),
-        subtotal: FakeHelper.decimal(),
-        subtotalTax: FakeHelper.decimal(),
-        total: FakeHelper.decimal(),
-        totalTax: FakeHelper.decimal(),
-        taxes: FakeHelper.list(() => WooTax.fake()),
-        metaData: FakeHelper.list(() => WooMetaData.fake()),
+        subtotal: FakeHelper.decimal().toString(),
+        subtotalTax: FakeHelper.decimal().toString(),
+        total: FakeHelper.decimal().toString(),
+        totalTax: FakeHelper.decimal().toString(),
+        taxes: List.generate(3, (index) => WooTax.fake()),
+        metaData: List.generate(3, (index) => WooMetaData.fake()),
         sku: FakeHelper.word(),
         price: FakeHelper.decimal(),
+        parentName: FakeHelper.word(),
       );
 }

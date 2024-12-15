@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 import 'package:woocommerce_flutter_api/src/order/models/line_item.dart';
 import 'package:woocommerce_flutter_api/src/order/models/shipping_line.dart';
@@ -13,137 +14,182 @@ import 'order_fee_line.dart';
 import 'refund.dart';
 import 'shipping.dart';
 
+part 'order.g.dart';
+
+@JsonSerializable()
 class WooOrder {
   /// Unique identifier for the resource.
-  int? id;
+  @JsonKey(name: 'id')
+  final int? id;
 
   /// Parent order ID.
-  int? parentId;
+  @JsonKey(name: 'parent_id')
+  final int? parentId;
 
   /// Order number.
-  String? number;
+  @JsonKey(name: 'number')
+  final String? number;
 
   /// Order key.
-  String? orderKey;
+  @JsonKey(name: 'order_key')
+  final String? orderKey;
 
   /// Shows where the order was created. Example: rest-api
-  String? createdVia;
+  @JsonKey(name: 'created_via')
+  final String? createdVia;
 
   /// Version of WooCommerce which last updated the order.
-  String? version;
+  @JsonKey(name: 'version')
+  final String? version;
 
   /// Order status. Options: pending, processing, on-hold, completed, cancelled, refunded, failed and trash. Default is pending.
-  WooOrderStatus? status;
+  @JsonKey(name: 'status')
+  final WooOrderStatus? status;
 
   /// Currency the order was created with, in ISO format. Options: AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN, BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB, BRL, BSD, BTC, BTN, BWP, BYR, BZD, CAD, CDF, CHF, CLP, CNY, COP, CRC, CUC, CUP, CVE, CZK, DJF, DKK, DOP, DZD, EGP, ERN, ETB, EUR, FJD, FKP,
   /// GBP, GEL, GGP, GHS, GIP, GMD, GNF, GTQ, GYD, HKD, HNL, HRK, HTG, HUF, IDR, ILS, IMP, INR, IQD, IRR, IRT, ISK, JEP, JMD, JOD, JPY, KES, KGS, KHR, KMF, KPW, KRW, KWD, KYD, KZT, LAK, LBP, LKR, LRD, LSL, LYD, MAD, MDL, MGA, MKD, MMK, MNT, MOP, MRO, MUR, MVR, MWK, MXN, MYR, MZN, NAD, NGN, NIO, NOK, NPR, NZD, OMR, PAB, PEN, PGK, PHP, PKR, PLN,
   /// PRB, PYG, QAR, RON, RSD, RUB, RWF, SAR, SBD, SCR, SDG, SEK, SGD, SHP, SLL, SOS, SRD, SSP, STD, SYP, SZL, THB, TJS, TMT, TND, TOP, TRY, TTD, TWD, TZS, UAH, UGX, USD, UYU, UZS, VEF, VND, VUV, WST, XAF, XCD, XOF, XPF, YER, ZAR and ZMW. Default is USD.
-  WooOrderCurrency? currency;
+  @JsonKey(name: 'currency')
+  final WooOrderCurrency? currency;
 
   /// The date the order was created, in the site's timezone.
-  DateTime? dateCreated;
+  @JsonKey(name: 'date_created')
+  final DateTime? dateCreated;
 
   /// The date the order was created, as GMT.
-  DateTime? dateCreatedGmt;
+  @JsonKey(name: 'date_created_gmt')
+  final DateTime? dateCreatedGmt;
 
   /// The date the order was last modified, in the site's timezone.
-  DateTime? dateModified;
+  @JsonKey(name: 'date_modified')
+  final DateTime? dateModified;
 
   /// The date the order was last modified, as GMT.
-  DateTime? dateModifiedGmt;
+  @JsonKey(name: 'date_modified_gmt')
+  final DateTime? dateModifiedGmt;
 
   /// Total discount amount for the order.
-  double? discountTotal;
+  @JsonKey(name: 'discount_total')
+  final double? discountTotal;
 
   /// Total discount tax amount for the order.
-  double? discountTax;
+  @JsonKey(name: 'discount_tax')
+  final double? discountTax;
 
   /// Total shipping amount for the order.
-  double? shippingTotal;
+  @JsonKey(name: 'shipping_total')
+  final double? shippingTotal;
 
   /// Total shipping tax amount for the order.
-  double? shippingTax;
+  @JsonKey(name: 'shipping_tax')
+  final double? shippingTax;
 
   /// Sum of line item taxes only.
-  double? cartTax;
+  @JsonKey(name: 'cart_tax')
+  final double? cartTax;
 
   /// Grand total.
-  double? total;
+  @JsonKey(name: 'total')
+  final double? total;
 
   /// Sum of all taxes.
-  double? totalTax;
+  @JsonKey(name: 'total_tax')
+  final double? totalTax;
 
   /// True the prices included tax during checkout.
-  bool? pricesIncludeTax;
+  @JsonKey(name: 'prices_include_tax')
+  final bool? pricesIncludeTax;
 
   /// User ID who owns the order. 0 for guests. Default is 0.
-  int? customerId;
+  @JsonKey(name: 'customer_id')
+  final int? customerId;
 
   /// Customer's IP address.
-  String? customerIpAddress;
+  @JsonKey(name: 'customer_ip_address')
+  final String? customerIpAddress;
 
   /// User agent of the customer.
-  String? customerUserAgent;
+  @JsonKey(name: 'customer_user_agent')
+  final String? customerUserAgent;
 
   /// Note left by customer during checkout.
-  String? customerNote;
+  @JsonKey(name: 'customer_note')
+  final String? customerNote;
 
   /// Billing address.
-  WooBilling? billing;
+  @JsonKey(name: 'billing')
+  final WooBilling? billing;
 
   /// Shipping address.
-  WooShipping? shipping;
+  @JsonKey(name: 'shipping')
+  final WooShipping? shipping;
 
   /// Payment method ID.
-  String? paymentMethod;
+  @JsonKey(name: 'payment_method')
+  final String? paymentMethod;
 
   /// Payment method title.
-  String? paymentMethodTitle;
+  @JsonKey(name: 'payment_method_title')
+  final String? paymentMethodTitle;
 
   /// Unique transaction ID.
-  String? transactionId;
+  @JsonKey(name: 'transaction_id')
+  final String? transactionId;
 
   /// The date the order was paid, in the site's timezone.
-  DateTime? datePaid;
+  @JsonKey(name: 'date_paid')
+  final DateTime? datePaid;
 
   /// The date the order was paid, as GMT.
-  DateTime? datePaidGmt;
+  @JsonKey(name: 'date_paid_gmt')
+  final DateTime? datePaidGmt;
 
   /// The date the order was completed, in the site's timezone.
-  DateTime? dateCompleted;
+  @JsonKey(name: 'date_completed')
+  final DateTime? dateCompleted;
 
   /// The date the order was completed, as GMT.
-  DateTime? dateCompletedGmt;
+  @JsonKey(name: 'date_completed_gmt')
+  final DateTime? dateCompletedGmt;
 
   /// MD5 hash of cart items to ensure orders are not modified.
-  String? cartHash;
+  @JsonKey(name: 'cart_hash')
+  final String? cartHash;
 
   /// Meta data.
-  List<WooMetaData>? metaData;
+  @JsonKey(name: 'meta_data')
+  final List<WooMetaData>? metaData;
 
   /// Line items data.
-  List<WooLineItem>? lineItems;
+  @JsonKey(name: 'line_items')
+  final List<WooLineItem>? lineItems;
 
   /// Tax lines data.
-  List<WooTaxLine>? taxLines;
+  @JsonKey(name: 'tax_lines')
+  final List<WooTaxLine>? taxLines;
 
   /// Shipping lines data.
-  List<WooShippingLine>? shippingLines;
+  @JsonKey(name: 'shipping_lines')
+  final List<WooShippingLine>? shippingLines;
 
   /// Fee lines data.
-  List<WooOrderFeeLine>? feeLines;
+  @JsonKey(name: 'fee_lines')
+  final List<WooOrderFeeLine>? feeLines;
 
   /// Coupons line data.
-  List<WooOrderCouponLine>? couponLines;
+  @JsonKey(name: 'coupon_lines')
+  final List<WooOrderCouponLine>? couponLines;
 
   /// List of refunds
-  List<WooRefund>? refunds;
+  @JsonKey(name: 'refunds')
+  final List<WooRefund>? refunds;
 
   /// Define if the order is paid. It will set the status to processing and reduce stock items. Default is false.
-  bool? setPaid;
+  @JsonKey(name: 'set_paid')
+  final bool? setPaid;
 
   WooOrder({
-    required int this.id,
+    this.id,
     this.parentId,
     this.number,
     this.orderKey,
@@ -187,158 +233,15 @@ class WooOrder {
     this.setPaid = false,
   });
 
-  WooOrder.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    parentId = json['parent_id'];
-    number = json['number'];
-    orderKey = json['order_key'];
-    createdVia = json['created_via'];
-    version = json['version'];
-    status = json['status'];
-    currency = json['currency'];
-    dateCreated = json['date_created'];
-    dateCreatedGmt = json['date_created_gmt'];
-    dateModified = json['date_modified'];
-    dateModifiedGmt = json['date_modified_gmt'];
-    discountTotal = json['discount_total'];
-    discountTax = json['discount_tax'];
-    shippingTotal = json['shipping_total'];
-    shippingTax = json['shipping_tax'];
-    cartTax = json['cart_tax'];
-    total = json['total'];
-    totalTax = json['total_tax'];
-    pricesIncludeTax = json['prices_include_tax'];
-    customerId = json['customer_id'];
-    customerIpAddress = json['customer_ip_address'];
-    customerUserAgent = json['customer_user_agent'];
-    customerNote = json['customer_note'];
-    billing =
-        json['billing'] != null ? WooBilling.fromJson(json['billing']) : null;
-    shipping = json['shipping'] != null
-        ? WooShipping.fromJson(json['shipping'])
-        : null;
-    paymentMethod = json['payment_method'];
-    paymentMethodTitle = json['payment_method_title'];
-    transactionId = json['transaction_id'];
-    datePaid = json['date_paid'];
-    datePaidGmt = json['date_paid_gmt'];
-    dateCompleted = json['date_completed'];
-    dateCompletedGmt = json['date_completed_gmt'];
-    cartHash = json['cart_hash'];
-    metaData = (json['meta_data'] as List)
-        .map((i) => WooMetaData.fromJson(i))
-        .toList();
-    if (json['line_items'] != null) {
-      lineItems = <WooLineItem>[];
-      json['line_items'].forEach((v) {
-        lineItems!.add(WooLineItem.fromJson(v));
-      });
-    }
-    if (json['tax_lines'] != null) {
-      taxLines = <WooTaxLine>[];
-      json['tax_lines'].forEach((v) {
-        taxLines!.add(WooTaxLine.fromJson(v));
-      });
-    }
-    if (json['shipping_lines'] != null) {
-      shippingLines = <WooShippingLine>[];
-      json['shipping_lines'].forEach((v) {
-        shippingLines!.add(WooShippingLine.fromJson(v));
-      });
-    }
-    if (json['fee_lines'] != null) {
-      feeLines = <WooOrderFeeLine>[];
-      json['fee_lines'].forEach((v) {
-        feeLines!.add(WooOrderFeeLine.fromJson(v));
-      });
-    }
-    if (json['coupon_lines'] != null) {
-      couponLines = [];
-      json['coupon_lines'].forEach((v) {
-        couponLines!.add(WooOrderCouponLine.fromJson(v));
-      });
-    }
+  factory WooOrder.fromJson(Map<String, dynamic> json) =>
+      _$WooOrderFromJson(json);
 
-    if (json['refunds'] != null) {
-      refunds = [];
-      json['refunds'].forEach((v) {
-        refunds!.add(WooRefund.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['parent_id'] = parentId;
-    data['number'] = number;
-    data['order_key'] = orderKey;
-    data['created_via'] = createdVia;
-    data['version'] = version;
-    data['status'] = status?.name;
-    data['currency'] = currency?.name;
-    data['date_created'] = dateCreated;
-    data['date_created_gmt'] = dateCreatedGmt;
-    data['date_modified'] = dateModified;
-    data['date_modified_gmt'] = dateModifiedGmt;
-    data['discount_total'] = discountTotal;
-    data['discount_tax'] = discountTax;
-    data['shipping_total'] = shippingTotal;
-    data['shipping_tax'] = shippingTax;
-    data['cart_tax'] = cartTax;
-    data['total'] = total;
-    data['total_tax'] = totalTax;
-    data['prices_include_tax'] = pricesIncludeTax;
-    data['customer_id'] = customerId;
-    data['customer_ip_address'] = customerIpAddress;
-    data['customer_user_agent'] = customerUserAgent;
-    data['customer_note'] = customerNote;
-    if (billing != null) {
-      data['billing'] = billing!.toJson();
-    }
-    if (shipping != null) {
-      data['shipping'] = shipping!.toJson();
-    }
-    data['payment_method'] = paymentMethod;
-    data['payment_method_title'] = paymentMethodTitle;
-    data['transaction_id'] = transactionId;
-    data['date_paid'] = datePaid;
-    data['date_paid_gmt'] = datePaidGmt;
-    data['date_completed'] = dateCompleted;
-    data['date_completed_gmt'] = dateCompletedGmt;
-    data['cart_hash'] = cartHash;
-    if (metaData != null) {
-      data['meta_data'] = metaData!.map((v) => v.toJson()).toList();
-    }
-    if (lineItems != null) {
-      data['line_items'] = lineItems!.map((v) => v.toJson()).toList();
-    }
-    if (taxLines != null) {
-      data['tax_lines'] = taxLines!.map((v) => v.toJson()).toList();
-    }
-    if (shippingLines != null) {
-      data['shipping_lines'] = shippingLines!.map((v) => v.toJson()).toList();
-    }
-    if (feeLines != null) {
-      data['fee_lines'] = feeLines!.map((v) => v.toJson()).toList();
-    }
-    if (couponLines != null) {
-      data['coupon_lines'] = couponLines!.map((v) => v.toJson()).toList();
-    }
-
-    if (refunds != null) {
-      data['refunds'] = refunds!.map((v) => v.toJson()).toList();
-    }
-
-    data['set_paid'] = setPaid;
-
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$WooOrderToJson(this);
 
   @override
-  toString() => toJson().toString();
+  String toString() => toJson().toString();
 
-  factory WooOrder.fake() => WooOrder(
+  static WooOrder fake() => WooOrder(
         id: FakeHelper.integer(),
         parentId: FakeHelper.integer(),
         number: FakeHelper.integer().toString(),

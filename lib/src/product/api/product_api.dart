@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:json_reader/json_reader.dart';
-import 'package:woocommerce_flutter_api/src/product/models/product_with_childrens.dart';
+ import 'package:woocommerce_flutter_api/src/product/models/product_with_childrens.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
@@ -148,7 +147,7 @@ extension WooProductApi on WooCommerce {
     );
 
     return (response.data as List)
-        .map((item) => WooProduct.fromJson(JsonReader(item)))
+        .map((item) => WooProduct.fromJson(item))
         .toList();
   }
 
@@ -308,7 +307,7 @@ extension WooProductApi on WooCommerce {
       _ProductEndpoints.singleProduct(id),
     );
 
-    return WooProduct.fromJson(JsonReader(response.data));
+    return WooProduct.fromJson(response.data);
   }
 
   /// gets a product with related products

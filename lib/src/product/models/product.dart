@@ -1,19 +1,530 @@
-import 'package:json_reader/json_reader.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:woocommerce_flutter_api/src/base/models/metadata.dart';
 import 'package:woocommerce_flutter_api/src/category/models/category.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 import 'package:woocommerce_flutter_api/src/product/enums/product_backorder.dart';
 import 'package:woocommerce_flutter_api/src/product/enums/product_catalog_visibility.dart';
+import 'package:woocommerce_flutter_api/src/product/enums/product_status.dart';
 import 'package:woocommerce_flutter_api/src/product/enums/product_stock_status.dart';
 import 'package:woocommerce_flutter_api/src/product/enums/product_tax_status.dart';
+import 'package:woocommerce_flutter_api/src/product/enums/product_type.dart';
+import 'package:woocommerce_flutter_api/src/product/models/product_dimension.dart';
+import 'package:woocommerce_flutter_api/src/product/models/product_download.dart';
+import 'package:woocommerce_flutter_api/src/product/models/product_image.dart';
+import 'package:woocommerce_flutter_api/src/product/models/product_item_attribute.dart';
+import 'package:woocommerce_flutter_api/src/product/models/product_item_tag.dart';
 
-import '../../base/models/metadata.dart';
-import '../enums/product_status.dart';
-import '../enums/product_type.dart';
-import 'product_dimension.dart';
-import 'product_download.dart';
-import 'product_image.dart';
-import 'product_item_attribute.dart';
-import 'product_item_tag.dart';
+part 'product.g.dart';
+
+@JsonSerializable()
+class WooProduct {
+  /// Unique identifier for the resource.
+  @JsonKey(name: 'id')
+  final int? id;
+
+  /// Product name.
+  @JsonKey(name: 'name')
+  final String? name;
+
+  /// Product slug.
+  @JsonKey(name: 'slug')
+  final String? slug;
+
+  /// Product URL.
+  @JsonKey(name: 'permalink')
+  final String? permalink;
+
+  /// The date the variation was created, in the site's timezone.
+  @JsonKey(name: 'date_created')
+  DateTime? dateCreated;
+
+  /// The date the variation was created, as GMT.
+  @JsonKey(name: 'date_created_gmt')
+  DateTime? dateCreatedGmt;
+
+  /// The date the variation was last modified, in the site's timezone.
+  @JsonKey(name: 'date_modified')
+  DateTime? dateModified;
+
+  /// The date the variation was last modified, as GMT.
+  @JsonKey(name: 'date_modified_gmt')
+  DateTime? dateModifiedGmt;
+
+  /// Product type. Options: simple, grouped, external and variable. Default is simple.
+  @JsonKey(name: 'type')
+  final WooProductType? type;
+
+  /// Product status (post status). Options: draft, pending, private and publish. Default is publish.
+  @JsonKey(name: 'status')
+  final WooProductStatus? status;
+
+  /// Featured product. Default is false.
+  @JsonKey(name: 'featured')
+  final bool? featured;
+
+  /// Catalog visibility. Options: visible, catalog, search and hidden. Default is visible.
+  @JsonKey(name: 'catalog_visibility')
+  final WooProductCatalogVisibility? catalogVisibility;
+
+  /// Product description.
+  @JsonKey(name: 'description')
+  final String? description;
+
+  /// Product short description.
+  @JsonKey(name: 'short_description')
+  final String? shortDescription;
+
+  /// Unique identifier.
+  @JsonKey(name: 'sku')
+  final String? sku;
+
+  /// Current product price.
+  @JsonKey(name: 'price')
+  final String? price;
+
+  /// Product regular price.
+  @JsonKey(name: 'regular_price')
+  final String? regularPrice;
+
+  /// Product sale price.
+  @JsonKey(name: 'sale_price')
+  final String? salePrice;
+
+  /// Start date of sale price, in the site's timezone.
+  @JsonKey(name: 'date_on_sale_from')
+  DateTime? dateOnSaleFrom;
+
+  /// Start date of sale price, as GMT.
+  @JsonKey(name: 'date_on_sale_from_gmt')
+  DateTime? dateOnSaleFromGmt;
+
+  /// End date of sale price, in the site's timezone.
+  @JsonKey(name: 'date_on_sale_to')
+  DateTime? dateOnSaleTo;
+
+  /// End date of sale price, as GMT.
+  @JsonKey(name: 'date_on_sale_to_gmt')
+  DateTime? dateOnSaleToGmt;
+
+  /// Price formatted in HTML.
+  @JsonKey(name: 'price_html')
+  final String? priceHtml;
+
+  /// Shows if the product is on sale.
+  @JsonKey(name: 'on_sale')
+  final bool? onSale;
+
+  /// Shows if the product can be bought.
+  @JsonKey(name: 'purchasable')
+  final bool? purchasable;
+
+  /// Amount of sales.
+  @JsonKey(name: 'total_sales')
+  final int? totalSales;
+
+  /// If the product is virtual. Default is false.
+  @JsonKey(name: 'virtual')
+  final bool? virtual;
+
+  /// If the product is downloadable. Default is false.
+  @JsonKey(name: 'downloadable')
+  final bool? downloadable;
+
+  /// List of downloadable files.
+  @JsonKey(name: 'downloads')
+  final List<WooProductDownload>? downloads;
+
+  /// Number of times downloadable files can be downloaded after purchase. Default is -1.
+  @JsonKey(name: 'download_limit')
+  final int? downloadLimit;
+
+  /// Number of days until access to downloadable files expires. Default is -1.
+  @JsonKey(name: 'download_expiry')
+  final int? downloadExpiry;
+
+  /// Product external URL. Only for external products.
+  @JsonKey(name: 'external_url')
+  final String? externalUrl;
+
+  /// Product external button text. Only for external products.
+  @JsonKey(name: 'button_text')
+  final String? buttonText;
+
+  /// Tax status. Options: taxable, shipping and none. Default is taxable.
+  @JsonKey(name: 'tax_status')
+  final WooProductTaxStatus? taxStatus;
+
+  /// Tax class.
+  @JsonKey(name: 'tax_class')
+  final String? taxClass;
+
+  /// Stock management at product level. Default is false.
+  @JsonKey(name: 'manage_stock')
+  final bool? manageStock;
+
+  /// Stock quantity.
+  @JsonKey(name: 'stock_quantity')
+  final int? stockQuantity;
+
+  /// Controls the stock status of the product. Options: instock, outofstock, onbackorder. Default is instock.
+  @JsonKey(name: 'stock_status')
+  final WooProductStockStatus? stockStatus;
+
+  /// If managing stock, this controls if backorders are allowed. Options: no, notify and yes. Default is no.
+  @JsonKey(name: 'backorders')
+  final WooProductBackorder? backorders;
+
+  /// Shows if backorders are allowed.
+  @JsonKey(name: 'backorders_allowed')
+  final bool? backordersAllowed;
+
+  /// Shows if the product is on backordered.
+  @JsonKey(name: 'backordered')
+  final bool? backordered;
+
+  /// Allow one item to be bought in a single order. Default is false.
+  @JsonKey(name: 'sold_individually')
+  final bool? soldIndividually;
+
+  /// Product weight.
+  @JsonKey(name: 'weight')
+  final String? weight;
+
+  /// Product dimensions.
+  @JsonKey(name: 'dimensions')
+  final WooProductDimension? dimensions;
+
+  /// Shows if the product need to be shipped.
+  @JsonKey(name: 'shipping_required')
+  final bool? shippingRequired;
+
+  /// Shows if the product shipping is taxable.
+  @JsonKey(name: 'shipping_taxable')
+  final bool? shippingTaxable;
+
+  /// Shipping class slug.
+  @JsonKey(name: 'shipping_class')
+  final String? shippingClass;
+
+  /// Shipping class ID.
+  @JsonKey(name: 'shipping_class_id')
+  final int? shippingClassId;
+
+  /// Allow reviews. Default is true.
+  @JsonKey(name: 'reviews_allowed')
+  final bool? reviewsAllowed;
+
+  /// Reviews average rating.
+  @JsonKey(name: 'average_rating')
+  final String? averageRating;
+
+  /// Amount of reviews that the product has.
+  @JsonKey(name: 'rating_count')
+  final int? ratingCount;
+
+  /// List of related products IDs.
+  @JsonKey(name: 'related_ids')
+  final List<int>? relatedIds;
+
+  /// List of up-sell products IDs.
+  @JsonKey(name: 'upsell_ids')
+  final List<int>? upsellIds;
+
+  /// List of cross-sell products IDs.
+  @JsonKey(name: 'cross_sell_ids')
+  final List<int>? crossSellIds;
+
+  /// Product parent ID.
+  @JsonKey(name: 'parent_id')
+  final int? parentId;
+
+  /// Optional note to send the customer after purchase.
+  @JsonKey(name: 'purchase_note')
+  final String? purchaseNote;
+
+  /// List of categories.
+  @JsonKey(name: 'categories')
+  final List<WooProductCategory>? categories;
+
+  /// List of tags.
+  @JsonKey(name: 'tags')
+  final List<WooProductItemTag>? tags;
+
+  /// List of images.
+  @JsonKey(name: 'images')
+  final List<WooProductImage>? images;
+
+  /// List of attributes.
+  @JsonKey(name: 'attributes')
+  final List<WooProductItemAttribute>? attributes;
+
+  /// Defaults variation attributes.
+  @JsonKey(name: 'default_attributes')
+  final List<WooProductItemAttribute>? defaultAttributes;
+
+  /// List of variations IDs.
+  @JsonKey(name: 'variations')
+  final List<int>? variations;
+
+  /// List of grouped products ID.
+  @JsonKey(name: 'grouped_products')
+  final List<int>? groupedProducts;
+
+  /// Menu order, used to custom sort products.
+  @JsonKey(name: 'menu_order')
+  final int? menuOrder;
+
+  /// Meta data.
+  @JsonKey(name: 'meta_data')
+  final List<WooMetaData>? metaData;
+
+  /// Allergens
+  @JsonKey(name: 'alergeny')
+  final List<Alergen>? alergeny;
+
+  @JsonKey(name: 'free_products')
+  final List<FreeProduct>? freeProducts;
+
+  @JsonKey(name: 'bonuses')
+  final int? bonuses;
+
+  @JsonKey(name: 'day_schedules')
+  final Map<DayOfWeek, DaySchedule>? daySchedules;
+
+  WooProduct({
+    this.id,
+    this.name,
+    this.slug,
+    this.permalink,
+    this.dateCreated,
+    this.dateCreatedGmt,
+    this.dateModified,
+    this.dateModifiedGmt,
+    this.type,
+    this.status,
+    this.featured,
+    this.catalogVisibility,
+    this.description,
+    this.shortDescription,
+    this.sku,
+    this.price,
+    this.regularPrice,
+    this.salePrice,
+    this.dateOnSaleFrom,
+    this.dateOnSaleFromGmt,
+    this.dateOnSaleTo,
+    this.dateOnSaleToGmt,
+    this.priceHtml,
+    this.onSale,
+    this.purchasable,
+    this.totalSales,
+    this.virtual,
+    this.downloadable,
+    this.downloads,
+    this.downloadLimit,
+    this.downloadExpiry,
+    this.externalUrl,
+    this.buttonText,
+    this.taxStatus,
+    this.taxClass,
+    this.manageStock,
+    this.stockQuantity,
+    this.stockStatus,
+    this.backorders,
+    this.backordersAllowed,
+    this.backordered,
+    this.soldIndividually,
+    this.weight,
+    this.dimensions,
+    this.shippingRequired,
+    this.shippingTaxable,
+    this.shippingClass,
+    this.shippingClassId,
+    this.reviewsAllowed,
+    this.averageRating,
+    this.ratingCount,
+    this.relatedIds,
+    this.upsellIds,
+    this.crossSellIds,
+    this.parentId,
+    this.purchaseNote,
+    this.categories,
+    this.tags,
+    this.images,
+    this.attributes,
+    this.defaultAttributes,
+    this.variations,
+    this.groupedProducts,
+    this.menuOrder,
+    this.metaData,
+    this.alergeny,
+    this.freeProducts,
+    this.bonuses,
+    this.daySchedules,
+  });
+
+  factory WooProduct.fromJson(Map<String, dynamic> json) =>
+      _$WooProductFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WooProductToJson(this);
+
+  bool get hasSchedule => daySchedules != null && daySchedules!.isNotEmpty;
+
+  @override
+  String toString() =>
+      "{id: $id}, {name: $name}, {price: $price}, {status: $status}";
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is WooProduct && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
+  }
+
+  static WooProduct fake() => WooProduct(
+        id: FakeHelper.integer(),
+        name: FakeHelper.word(),
+        slug: FakeHelper.word(),
+        permalink: FakeHelper.word(),
+        dateCreated: DateTime.now(),
+        dateCreatedGmt: DateTime.now(),
+        dateModified: DateTime.now(),
+        dateModifiedGmt: DateTime.now(),
+        type: WooProductType.simple,
+        status: WooProductStatus.publish,
+        featured: FakeHelper.boolean(),
+        catalogVisibility: WooProductCatalogVisibility.visible,
+        description: FakeHelper.word(),
+        shortDescription: FakeHelper.word(),
+        sku: FakeHelper.word(),
+        price: FakeHelper.decimal().toString(),
+        regularPrice: FakeHelper.decimal().toString(),
+        salePrice: FakeHelper.decimal().toString(),
+        dateOnSaleFrom: DateTime.now(),
+        dateOnSaleFromGmt: DateTime.now(),
+        dateOnSaleTo: DateTime.now(),
+        dateOnSaleToGmt: DateTime.now(),
+        priceHtml: FakeHelper.word(),
+        onSale: FakeHelper.boolean(),
+        purchasable: FakeHelper.boolean(),
+        totalSales: FakeHelper.integer(),
+        virtual: FakeHelper.boolean(),
+        downloadable: FakeHelper.boolean(),
+        downloads: List.generate(3, (index) => WooProductDownload.fake()),
+        downloadLimit: FakeHelper.integer(),
+        downloadExpiry: FakeHelper.integer(),
+        externalUrl: FakeHelper.word(),
+        buttonText: FakeHelper.word(),
+        taxStatus: WooProductTaxStatus.taxable,
+        taxClass: FakeHelper.word(),
+        manageStock: FakeHelper.boolean(),
+        stockQuantity: FakeHelper.integer(),
+        stockStatus: WooProductStockStatus.instock,
+        backorders: WooProductBackorder.no,
+        backordersAllowed: FakeHelper.boolean(),
+        backordered: FakeHelper.boolean(),
+        soldIndividually: FakeHelper.boolean(),
+        weight: FakeHelper.decimal().toString(),
+        dimensions: WooProductDimension.fake(),
+        shippingRequired: FakeHelper.boolean(),
+        shippingTaxable: FakeHelper.boolean(),
+        shippingClass: FakeHelper.word(),
+        shippingClassId: FakeHelper.integer(),
+        reviewsAllowed: FakeHelper.boolean(),
+        averageRating: FakeHelper.decimal().toString(),
+        ratingCount: FakeHelper.integer(),
+        relatedIds: List.generate(3, (index) => FakeHelper.integer()),
+        upsellIds: List.generate(3, (index) => FakeHelper.integer()),
+        crossSellIds: List.generate(3, (index) => FakeHelper.integer()),
+        parentId: FakeHelper.integer(),
+        purchaseNote: FakeHelper.word(),
+        categories: List.generate(3, (index) => WooProductCategory.fake()),
+        tags: List.generate(3, (index) => WooProductItemTag.fake()),
+        images: List.generate(3, (index) => WooProductImage.fake()),
+        attributes: List.generate(3, (index) => WooProductItemAttribute.fake()),
+        defaultAttributes:
+            List.generate(3, (index) => WooProductItemAttribute.fake()),
+        variations: List.generate(3, (index) => FakeHelper.integer()),
+        groupedProducts: List.generate(3, (index) => FakeHelper.integer()),
+        menuOrder: FakeHelper.integer(),
+        metaData: List.generate(3, (index) => WooMetaData.fake()),
+        alergeny: List.generate(3, (index) => Alergen.fake()),
+        freeProducts: List.generate(3, (index) => FreeProduct.fake()),
+        bonuses: FakeHelper.integer(),
+        daySchedules: {
+          DayOfWeek.monday: DaySchedule.fake(),
+          DayOfWeek.tuesday: DaySchedule.fake(),
+          DayOfWeek.wednesday: DaySchedule.fake(),
+          DayOfWeek.thursday: DaySchedule.fake(),
+          DayOfWeek.friday: DaySchedule.fake(),
+          DayOfWeek.saturday: DaySchedule.fake(),
+          DayOfWeek.sunday: DaySchedule.fake(),
+        },
+      );
+}
+
+@JsonSerializable()
+class FreeProduct {
+  FreeProduct(
+    this.count,
+    this.id,
+  );
+
+  factory FreeProduct.fromJson(Map<String, dynamic> json) =>
+      _$FreeProductFromJson(json);
+
+  final int count;
+  final int id;
+
+  Map<String, dynamic> toJson() => _$FreeProductToJson(this);
+
+  static FreeProduct fake() =>
+      FreeProduct(FakeHelper.integer(), FakeHelper.integer());
+}
+
+@JsonSerializable()
+class Alergen {
+  Alergen(
+    this.id,
+    this.name,
+    this.slug,
+    this.alergen,
+  );
+
+  factory Alergen.fromJson(Map<String, dynamic> json) =>
+      _$AlergenFromJson(json);
+
+  final int id;
+  final String name;
+  final String slug;
+  final String alergen;
+
+  Map<String, dynamic> toJson() => _$AlergenToJson(this);
+
+  static Alergen fake() => Alergen(FakeHelper.integer(), FakeHelper.word(),
+      FakeHelper.word(), FakeHelper.word());
+}
+
+@JsonSerializable()
+class DaySchedule {
+  DaySchedule(this.startTime, this.endTime);
+
+  factory DaySchedule.fromJson(Map<String, dynamic> json) =>
+      _$DayScheduleFromJson(json);
+
+  final String startTime;
+  final String endTime;
+
+  Map<String, dynamic> toJson() => _$DayScheduleToJson(this);
+
+  static DaySchedule fake() =>
+      DaySchedule(FakeHelper.word(), FakeHelper.word());
+}
 
 enum DayOfWeek {
   monday(1),
@@ -69,606 +580,4 @@ enum DayOfWeek {
         throw ArgumentError('Day is undefined => $day');
     }
   }
-}
-
-class WooProduct {
-  /// Unique identifier for the resource.
-  final int? id;
-
-  /// Product name.
-  final String? name;
-
-  /// Product slug.
-  final String? slug;
-
-  /// Product URL.
-  final String? permalink;
-
-  /// The date the variation was created, in the site's timezone.
-  DateTime? dateCreated;
-
-  /// The date the variation was created, as GMT.
-  DateTime? dateCreatedGmt;
-
-  /// The date the variation was last modified, in the site's timezone.
-  DateTime? dateModified;
-
-  /// The date the variation was last modified, as GMT.
-  DateTime? dateModifiedGmt;
-
-  /// Product type. Options: simple, grouped, external and variable. Default is simple.
-  final WooProductType? type;
-
-  /// Product status (post status). Options: draft, pending, private and publish. Default is publish.
-  final WooProductStatus? status;
-
-  /// Featured product. Default is false.
-  final bool? featured;
-
-  /// Catalog visibility. Options: visible, catalog, search and hidden. Default is visible.
-  final WooProductCatalogVisibility? catalogVisibility;
-
-  /// Product description.
-  final String? description;
-
-  /// Product short description.
-  final String? shortDescription;
-
-  /// Unique identifier.
-  final String? sku;
-
-  /// Current product price.
-  final double? price;
-
-  /// Product regular price.
-  final double? regularPrice;
-
-  /// Product sale price.
-  final double? salePrice;
-
-  /// Start date of sale price, in the site's timezone.
-  DateTime? dateOnSaleFrom;
-
-  /// Start date of sale price, as GMT.
-  DateTime? dateOnSaleFromGmt;
-
-  /// End date of sale price, in the site's timezone.
-  DateTime? dateOnSaleTo;
-
-  /// End date of sale price, as GMT.
-  DateTime? dateOnSaleToGmt;
-
-  /// Price formatted in HTML.
-  final String? priceHtml;
-
-  /// Shows if the product is on sale.
-  final bool? onSale;
-
-  /// Shows if the product can be bought.
-  final bool? purchasable;
-
-  /// Amount of sales.
-  final int? totalSales;
-
-  /// If the product is virtual. Default is false.
-  final bool? virtual;
-
-  /// If the product is downloadable. Default is false.
-  final bool? downloadable;
-
-  /// List of downloadable files.
-  final List<WooProductDownload> downloads;
-
-  /// Number of times downloadable files can be downloaded after purchase. Default is -1.
-  final int? downloadLimit;
-
-  /// Number of days until access to downloadable files expires. Default is -1.
-  final int? downloadExpiry;
-
-  /// Product external URL. Only for external products.
-  final String? externalUrl;
-
-  /// Product external button text. Only for external products.
-  final String? buttonText;
-
-  /// Tax status. Options: taxable, shipping and none. Default is taxable.
-  final WooProductTaxStatus? taxStatus;
-
-  /// Tax class.
-  final String? taxClass;
-
-  /// Stock management at product level. Default is false.
-  final bool? manageStock;
-
-  /// Stock quantity.
-  final int? stockQuantity;
-
-  /// Controls the stock status of the product. Options: instock, outofstock, onbackorder. Default is instock.
-  final WooProductStockStatus? stockStatus;
-
-  /// If managing stock, this controls if backorders are allowed. Options: no, notify and yes. Default is no.
-  final WooProductBackorder? backorders;
-
-  /// Shows if backorders are allowed.
-  final bool? backordersAllowed;
-
-  /// Shows if the product is on backordered.
-  final bool? backordered;
-
-  /// Allow one item to be bought in a single order. Default is false.
-  final bool? soldIndividually;
-
-  /// Product weight.
-  final String? weight;
-
-  /// Product dimensions.
-  final WooProductDimension? dimensions;
-
-  /// Shows if the product need to be shipped.
-  final bool? shippingRequired;
-
-  /// Shows whether or not the product shipping is taxable.
-  final bool? shippingTaxable;
-
-  /// Shipping class slug.
-  final String? shippingClass;
-
-  /// Shipping class ID.
-  final int? shippingClassId;
-
-  /// Allow reviews. Default is true.
-  final bool? reviewsAllowed;
-
-  /// Reviews average rating.
-  final String? averageRating;
-
-  /// Amount of reviews that the product have.
-  final int? ratingCount;
-
-  /// List of related products IDs.
-  final List<int>? relatedIds;
-
-  /// List of up-sell products IDs.
-  final List<int>? upsellIds;
-
-  /// List of cross-sell products IDs.
-  final List<int>? crossSellIds;
-
-  /// Product parent ID.
-  final int? parentId;
-
-  /// Optional note to send the customer after purchase.
-  final String? purchaseNote;
-
-  /// List of categories. it just includes id, name, slug
-  final List<WooProductCategory> categories;
-
-  /// List of tags.
-  final List<WooProductItemTag> tags;
-
-  /// List of images.
-  final List<WooProductImage> images;
-
-  /// List of attributes.
-  final List<WooProductItemAttribute> attributes;
-
-  /// Defaults variation attributes.
-  final List<WooProductDefaultAttribute> defaultAttributes;
-
-  /// List of variations IDs.
-  final List<int>? variations;
-
-  /// List of grouped products ID.
-  final List<int>? groupedProducts;
-
-  /// Menu order, used to custom sort products.
-  final int? menuOrder;
-
-  /// Meta data
-  final List<WooMetaData> metaData;
-
-  /// Allergens
-  final List<Alergen> alergeny;
-
-  final List<FreeProduct> freeProducts;
-
-  final int bonuses;
-
-  final Map<DayOfWeek, DaySchedule> daySchedules;
-
-  WooProduct({
-    this.id,
-    this.name,
-    this.slug,
-    this.permalink,
-    this.type,
-    this.status,
-    this.featured,
-    this.catalogVisibility,
-    this.dateCreated,
-    this.dateCreatedGmt,
-    this.dateModified,
-    this.dateModifiedGmt,
-    this.dateOnSaleFrom,
-    this.dateOnSaleFromGmt,
-    this.dateOnSaleTo,
-    this.dateOnSaleToGmt,
-    this.description,
-    this.shortDescription,
-    this.sku,
-    this.price,
-    this.regularPrice,
-    this.salePrice,
-    this.priceHtml,
-    this.onSale,
-    this.purchasable,
-    this.totalSales,
-    this.virtual,
-    this.downloadable,
-    this.downloads = const [],
-    this.downloadLimit,
-    this.downloadExpiry,
-    this.externalUrl,
-    this.buttonText,
-    this.taxStatus,
-    this.taxClass,
-    this.manageStock,
-    this.stockQuantity,
-    this.stockStatus,
-    this.backorders,
-    this.backordersAllowed,
-    this.backordered,
-    this.soldIndividually,
-    this.weight,
-    this.dimensions,
-    this.shippingRequired,
-    this.shippingTaxable,
-    this.shippingClass,
-    this.shippingClassId,
-    this.reviewsAllowed,
-    this.averageRating,
-    this.ratingCount,
-    this.relatedIds,
-    this.upsellIds,
-    this.crossSellIds,
-    this.parentId,
-    this.purchaseNote,
-    this.categories = const [],
-    this.tags = const [],
-    this.images = const [],
-    this.attributes = const [],
-    this.defaultAttributes = const [],
-    this.variations,
-    this.groupedProducts,
-    this.menuOrder,
-    this.metaData = const [],
-    this.alergeny = const [],
-    this.freeProducts = const [],
-    this.bonuses = 0,
-    this.daySchedules = const {},
-  });
-
-  WooProduct.fromJson(JsonReader json)
-      : id = json['id'].asIntOrNull(),
-        name = json['name'].asStringOrNull(),
-        slug = json['slug'].asStringOrNull(),
-        dateCreated = json['date_created'].asDateTime(),
-        dateCreatedGmt = json['date_modified_gmt'].asDateTime(),
-        dateModified = json['date_modified'].asDateTime(),
-        dateModifiedGmt = json['date_created_gmt'].asDateTime(),
-        dateOnSaleFrom = json['date_on_sale_from'].asDateTime(),
-        dateOnSaleFromGmt = json['date_on_sale_from_gmt'].asDateTime(),
-        dateOnSaleTo = json['date_on_sale_to'].asDateTime(),
-        dateOnSaleToGmt = json['date_on_sale_to_gmt'].asDateTime(),
-        permalink = json['permalink'].asStringOrNull(),
-        type = WooProductType.fromString(json['type'].asString()),
-        status = WooProductStatus.fromString(json['status'].asString()),
-        featured = json['featured'].asBool(),
-        catalogVisibility = WooProductCatalogVisibility.fromString(
-            json['catalog_visibility'].asString()),
-        description = json['description'].asStringOrNull(),
-        shortDescription = json['short_description'].asStringOrNull(),
-        sku = json['sku'].asStringOrNull(),
-        price = double.tryParse(json['price'].asString()),
-        regularPrice = double.tryParse(json['regular_price'].asString()),
-        salePrice = double.tryParse(json['sale_price'].asString()),
-        priceHtml = json['price_html'].asStringOrNull(),
-        onSale = json['on_sale'].asBool(),
-        purchasable = json['purchasable'].asBool(),
-        totalSales = json['total_sales'].asIntOrNull(),
-        virtual = json['virtual'].asBool(),
-        downloadable = json['downloadable'].asBool(),
-        downloads = json['downloads']
-            .asList()
-            .map((i) => WooProductDownload.fromJson(i.asMap()))
-            .toList(),
-        downloadLimit = json['download_limit'].asIntOrNull(),
-        downloadExpiry = json['download_expiry'].asIntOrNull(),
-        externalUrl = json['external_url'].asStringOrNull(),
-        buttonText = json['button_text'].asStringOrNull(),
-        taxStatus =
-            WooProductTaxStatus.fromString(json['tax_status'].asString()),
-        taxClass = json['tax_class'].asStringOrNull(),
-        manageStock = json['manage_stock'].asBool(),
-        stockQuantity = json['stock_quantity'].asIntOrNull(),
-        stockStatus =
-            WooProductStockStatus.fromString(json['stock_status'].asString()),
-        backorders =
-            WooProductBackorder.fromString(json['backorders'].asString()),
-        backordersAllowed = json['backorders_allowed'].asBool(),
-        backordered = json['backordered'].asBool(),
-        soldIndividually = json['sold_individually'].asBool(),
-        weight = json['weight'].asStringOrNull(),
-        dimensions = WooProductDimension.fromJson(json['dimensions'].asMap()),
-        shippingRequired = json['shipping_required'].asBool(),
-        shippingTaxable = json['shipping_taxable'].asBool(),
-        shippingClass = json['shipping_class'].asStringOrNull(),
-        shippingClassId = json['shipping_class_id'].asIntOrNull(),
-        reviewsAllowed = json['reviews_allowed'].asBool(),
-        averageRating = json['average_rating'].asStringOrNull(),
-        ratingCount = json['rating_count'].asIntOrNull(),
-        relatedIds =
-            json['related_ids'].asList().map((e) => e.asInt()).toList(),
-        upsellIds = json['upsell_ids'].asList().map((e) => e.asInt()).toList(),
-        crossSellIds =
-            json['cross_sell_ids'].asList().map((e) => e.asInt()).toList(),
-        parentId = json['parent_id'].asIntOrNull(),
-        purchaseNote = json['purchase_note'].asStringOrNull(),
-        categories = json['categories']
-            .asList()
-            .map((i) => WooProductCategory.fromJson(i))
-            .toList(),
-        tags = json['tags']
-            .asList()
-            .map((i) => WooProductItemTag.fromJson(i.asMap()))
-            .toList(),
-        images = json['images']
-            .asList()
-            .map((i) => WooProductImage.fromJson(i.asMap()))
-            .toList(),
-        attributes = json['attributes']
-            .asList()
-            .map((i) => WooProductItemAttribute.fromJson(i.asMap()))
-            .toList(),
-        defaultAttributes = json['default_attributes']
-            .asList()
-            .map((i) => WooProductDefaultAttribute.fromJson(i.asMap()))
-            .toList(),
-        variations = json['variations'].asList().map((e) => e.asInt()).toList(),
-        groupedProducts =
-            json['grouped_products'].asList().map((e) => e.asInt()).toList(),
-        menuOrder = json['menu_order'].asIntOrNull(),
-        metaData = json['meta_data']
-            .asList()
-            .map((i) => WooMetaData.fromJson(i))
-            .toList(),
-        alergeny = json['alergeny'].asList().map(Alergen.fromJson).toList(),
-        freeProducts = json['free_products']
-            .asList()
-            .map(FreeProduct.fromJson)
-            .where((e) => e.count > 0)
-            .toList(),
-        bonuses = json['bonuses'].asInt(),
-        daySchedules = json['day_schedules'].asMap().map(
-              (key, value) => MapEntry(
-                DayOfWeek.fromString(key),
-                DaySchedule(
-                  value['start_time'],
-                  value['end_time'],
-                ),
-              ),
-            );
-
-  bool get hasSchedule => daySchedules.isNotEmpty;
-
-  @override
-  toString() => "{id: $id}, {name: $name}, {price: $price}, {status: $status}";
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is WooProduct && other.id == id;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode;
-  }
-
-  factory WooProduct.fake() => WooProduct(
-        id: FakeHelper.integer(),
-        name: FakeHelper.word(),
-        slug: FakeHelper.word(),
-        permalink: FakeHelper.url(),
-        type: WooProductType.fake(),
-        status: WooProductStatus.fake(),
-        featured: FakeHelper.boolean(),
-        catalogVisibility: WooProductCatalogVisibility.fake(),
-        description: FakeHelper.sentence(),
-        shortDescription: FakeHelper.sentence(),
-        sku: FakeHelper.word(),
-        price: FakeHelper.decimal(),
-        regularPrice: FakeHelper.decimal(),
-        salePrice: FakeHelper.decimal(),
-        priceHtml: FakeHelper.sentence(),
-        onSale: FakeHelper.boolean(),
-        purchasable: FakeHelper.boolean(),
-        totalSales: FakeHelper.integer(),
-        virtual: FakeHelper.boolean(),
-        downloadable: FakeHelper.boolean(),
-        downloads: FakeHelper.list(() => WooProductDownload.fake()),
-        downloadLimit: FakeHelper.integer(),
-        downloadExpiry: FakeHelper.integer(),
-        externalUrl: FakeHelper.url(),
-        buttonText: FakeHelper.word(),
-        taxStatus: WooProductTaxStatus.fake(),
-        taxClass: FakeHelper.word(),
-        manageStock: FakeHelper.boolean(),
-        stockQuantity: FakeHelper.integer(),
-        stockStatus: WooProductStockStatus.fake(),
-        backorders: WooProductBackorder.fake(),
-        backordersAllowed: FakeHelper.boolean(),
-        backordered: FakeHelper.boolean(),
-        soldIndividually: FakeHelper.boolean(),
-        weight: FakeHelper.decimal().toString(),
-        dimensions: WooProductDimension.fake(),
-        shippingRequired: FakeHelper.boolean(),
-        shippingTaxable: FakeHelper.boolean(),
-        shippingClass: FakeHelper.word(),
-        shippingClassId: FakeHelper.integer(),
-        reviewsAllowed: FakeHelper.boolean(),
-        averageRating: FakeHelper.word(),
-        ratingCount: FakeHelper.integer(),
-        relatedIds: FakeHelper.listOfIntegers(),
-        upsellIds: FakeHelper.listOfIntegers(),
-        crossSellIds: FakeHelper.listOfIntegers(),
-        parentId: FakeHelper.integer(),
-        purchaseNote: FakeHelper.word(),
-        categories: FakeHelper.list(() => WooProductCategory.fake()),
-        tags: FakeHelper.list(() => WooProductItemTag.fake()),
-        images: FakeHelper.list(() => WooProductImage.fake()),
-        attributes: FakeHelper.list(() => WooProductItemAttribute.fake()),
-        defaultAttributes:
-            FakeHelper.list(() => WooProductDefaultAttribute.fake()),
-        variations: FakeHelper.listOfIntegers(),
-        groupedProducts: FakeHelper.listOfIntegers(),
-        menuOrder: FakeHelper.integer(),
-        metaData: FakeHelper.list(() => WooMetaData.fake()),
-        dateCreated: FakeHelper.datetime(),
-        dateCreatedGmt: FakeHelper.datetime(),
-        dateModified: FakeHelper.datetime(),
-        dateModifiedGmt: FakeHelper.datetime(),
-        dateOnSaleFrom: FakeHelper.datetime(),
-        dateOnSaleFromGmt: FakeHelper.datetime(),
-        dateOnSaleTo: FakeHelper.datetime(),
-        dateOnSaleToGmt: FakeHelper.datetime(),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'slug': slug,
-        'date_created': dateCreated?.millisecondsSinceEpoch,
-        'date_created_gmt': dateCreatedGmt?.millisecondsSinceEpoch,
-        'date_modified': dateModified?.millisecondsSinceEpoch,
-        'date_modified_gmt': dateModifiedGmt?.millisecondsSinceEpoch,
-        'date_on_sale_from': dateOnSaleFrom?.millisecondsSinceEpoch,
-        'date_on_sale_from_gmt': dateOnSaleFromGmt?.millisecondsSinceEpoch,
-        'date_on_sale_to': dateOnSaleTo?.millisecondsSinceEpoch,
-        'date_on_sale_to_gmt': dateOnSaleToGmt?.millisecondsSinceEpoch,
-        'permalink': permalink,
-        'type': type.toString(),
-        'status': status.toString(),
-        'featured': featured,
-        'catalog_visibility': catalogVisibility.toString(),
-        'description': description,
-        'short_description': shortDescription,
-        'sku': sku,
-        'price': price,
-        'regular_price': regularPrice,
-        'sale_price': salePrice,
-        'price_html': priceHtml,
-        'on_sale': onSale,
-        'purchasable': purchasable,
-        'total_sales': totalSales,
-        'virtual': virtual,
-        'downloadable': downloadable,
-        'downloads': downloads.map((e) => e.toJson()).toList(),
-        'download_limit': downloadLimit,
-        'download_expiry': downloadExpiry,
-        'external_url': externalUrl,
-        'button_text': buttonText,
-        'tax_status': taxStatus.toString(),
-        'tax_class': taxClass,
-        'manage_stock': manageStock,
-        'stock_quantity': stockQuantity,
-        'stock_status': stockStatus.toString(),
-        'backorders': backorders.toString(),
-        'backorders_allowed': backordersAllowed,
-        'backordered': backordered,
-        'sold_individually': soldIndividually,
-        'weight': weight,
-        'dimensions': dimensions?.toJson(),
-        'shipping_required': shippingRequired,
-        'shipping_taxable': shippingTaxable,
-        'shipping_class': shippingClass,
-        'shipping_class_id': shippingClassId,
-        'reviews_allowed': reviewsAllowed,
-        'average_rating': averageRating,
-        'rating_count': ratingCount,
-        'related_ids': relatedIds,
-        'upsell_ids': upsellIds,
-        'cross_sell_ids': crossSellIds,
-        'parent_id': parentId,
-        'purchase_note': purchaseNote,
-        'categories': categories.map((e) => e.toJson()).toList(),
-        'tags': tags.map((e) => e.toJson()).toList(),
-        'images': images.map((e) => e.toJson()).toList(),
-        'attributes': attributes.map((e) => e.toJson()).toList(),
-        'default_attributes': defaultAttributes.map((e) => e.toJson()).toList(),
-        'variations': variations,
-        'grouped_products': groupedProducts,
-        'menu_order': menuOrder,
-        'meta_data': metaData.map((e) => e.toJson()).toList(),
-        'alergeny': alergeny.map((e) => e.toJson()).toList(),
-        'free_products': freeProducts.map((e) => e.toJson()).toList(),
-        'bonuses': bonuses,
-        'day_schedules': daySchedules
-            .map((key, value) => MapEntry(key.name, value.toJson())),
-      };
-}
-
-class FreeProduct {
-  const FreeProduct(this.count, this.id);
-  factory FreeProduct.fromJson(JsonReader json) => FreeProduct(
-        json['count'].asInt(),
-        json['id'].asInt(),
-      );
-  final int count;
-  final int id;
-
-  Map<String, dynamic> toJson() => {
-        'count': count,
-        'id': id,
-      };
-}
-
-class Alergen {
-  const Alergen(
-    this.id,
-    this.name,
-    this.slug,
-    this.alergen,
-  );
-
-  factory Alergen.fromJson(JsonReader json) => Alergen(
-        json['id'].asInt(),
-        json['name'].asString(),
-        json['slug'].asString(),
-        json['alergen'].asString(),
-      );
-
-  final int id;
-  final String name;
-  final String slug;
-  final String alergen;
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'slug': slug,
-        'alergen': alergen,
-      };
-}
-
-class DaySchedule {
-  const DaySchedule(this.startTime, this.endTime);
-  final String startTime;
-  final String endTime;
-
-  Map<String, dynamic> toJson() => {
-        'start_time': startTime,
-        'end_time': endTime,
-      };
 }

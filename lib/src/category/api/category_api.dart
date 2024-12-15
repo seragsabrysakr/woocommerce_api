@@ -1,5 +1,4 @@
-import 'package:json_reader/json_reader.dart';
-import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
+ import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
 
@@ -37,7 +36,7 @@ extension WooCategoryApi on WooCommerce {
     List<int>? exclude,
     List<int>? include,
     WooSortOrder order = WooSortOrder.desc,
-    WooSortOrderBy orderBy = WooSortOrderBy.date,
+    WooSortOrderBy orderBy = WooSortOrderBy.id,
     bool? hideEmpty,
     int? parent,
     int? product,
@@ -69,7 +68,7 @@ extension WooCategoryApi on WooCommerce {
     );
 
     return (response.data as List)
-        .map((item) => WooProductCategory.fromJson(JsonReader(item)))
+        .map((item) => WooProductCategory.fromJson(item))
         .toList();
   }
 
@@ -135,6 +134,6 @@ extension WooCategoryApi on WooCommerce {
 
     final response = await dio.get(_CategoryEndpoints.singleCategory(id));
 
-    return WooProductCategory.fromJson(JsonReader(response.data));
+    return WooProductCategory.fromJson(response.data);
   }
 }

@@ -1,52 +1,56 @@
 import 'package:faker/faker.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'product_item_attribute.g.dart';
+
+@JsonSerializable()
 class WooProductItemAttribute {
   /// Attribute ID.
+  @JsonKey(name: 'id')
   final int? id;
 
   /// Attribute name.
+  @JsonKey(name: 'name')
   final String? name;
 
   /// Attribute position.
+  @JsonKey(name: 'position')
   final int? position;
 
-  /// Define if the attribute is visible on the "Additional information" tab in the product's page. Default is false.
+  /// Is attribute visible on product page.
+  @JsonKey(name: 'visible')
   final bool? visible;
 
-  /// Define if the attribute can be used as variation. Default is false.
+  /// Is attribute used for variations.
+  @JsonKey(name: 'variation')
   final bool? variation;
 
-  /// List of available term names of the attribute.
+  /// List of available terms.
+  @JsonKey(name: 'options')
   final List<String>? options;
 
-  WooProductItemAttribute(this.id, this.name, this.position, this.visible,
-      this.variation, this.options);
+  WooProductItemAttribute({
+    this.id,
+    this.name,
+    this.position,
+    this.visible,
+    this.variation,
+    this.options,
+  });
 
-  WooProductItemAttribute.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        position = json['position'],
-        visible = json['visible'],
-        variation = json['variation'],
-        options = json['options'].cast<String>();
+  factory WooProductItemAttribute.fromJson(Map<String, dynamic> json) =>
+      _$WooProductItemAttributeFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'position': position,
-        'visible': visible,
-        'variation': variation,
-        'options': options,
-      };
+  Map<String, dynamic> toJson() => _$WooProductItemAttributeToJson(this);
 
-  factory WooProductItemAttribute.fake() => WooProductItemAttribute(
-        FakeHelper.integer(),
-        FakeHelper.word(),
-        FakeHelper.integer(),
-        FakeHelper.boolean(),
-        FakeHelper.boolean(),
-        List.filled(Faker().randomGenerator.integer(10), FakeHelper.word()),
+  static WooProductItemAttribute fake() => WooProductItemAttribute(
+        id: FakeHelper.integer(),
+        name: FakeHelper.word(),
+        position: FakeHelper.integer(),
+        visible: FakeHelper.boolean(),
+        variation: FakeHelper.boolean(),
+        options: List.generate(3, (index) => FakeHelper.word()),
       );
 }
 

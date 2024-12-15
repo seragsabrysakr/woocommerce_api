@@ -1,28 +1,36 @@
-import 'package:json_reader/json_reader.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 
+part 'metadata.g.dart';
+
+@JsonSerializable()
 class WooMetaData {
   /// Meta ID.
+  @JsonKey(name: 'id')
   final int? id;
 
   /// Meta key.
+  @JsonKey(name: 'key')
   final String? key;
 
   /// Meta value.
-  final String value;
+  @JsonKey(name: 'value')
+  final dynamic value;
 
-  WooMetaData(this.id, this.key, this.value);
+  WooMetaData({
+    this.id,
+    this.key,
+    this.value,
+  });
 
-  WooMetaData.fromJson(JsonReader json)
-      : id = json['id'].asIntOrNull(),
-        key = json['key'].asStringOrNull(),
-        value = json['value'].asString();
+  factory WooMetaData.fromJson(Map<String, dynamic> json) =>
+      _$WooMetaDataFromJson(json);
 
-  Map<String, dynamic> toJson() => {'id': id, 'key': key, 'value': value};
+  Map<String, dynamic> toJson() => _$WooMetaDataToJson(this);
 
-  factory WooMetaData.fake() => WooMetaData(
-        FakeHelper.integer(),
-        FakeHelper.word(),
-        FakeHelper.word(),
+  static WooMetaData fake() => WooMetaData(
+        id: FakeHelper.integer(),
+        key: FakeHelper.word(),
+        value: FakeHelper.word(),
       );
 }
