@@ -39,7 +39,3 @@ final products = await woocommerce.getProducts();
 
 print(products);
 ```
-
-## Additional information
-
-You can reach us using amjadqasem07@gmail.com if you have some questions.
