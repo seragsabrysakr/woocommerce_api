@@ -1,3 +1,4 @@
+import 'package:woocommerce_flutter_api/woocommerce_api.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 void main() async {
@@ -9,7 +10,7 @@ void main() async {
     useFaker: false,
   );
 
-  final response = await woocommerce.getProducts();
+  final response = await woocommerce.getShippingMethods(zoneId: 10);
 
   print(response);
 }
