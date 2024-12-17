@@ -2,7 +2,7 @@ import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
 
-extension WooVariationApi on WooCommerce {
+extension WooVariationApi on FlutterWooCommerce {
   /// [context] Scope under which the request is made; determines fields present in response. Options: view and edit. Default is view.
   ///
   /// [page] Current page of the collection. Default is 1.
@@ -46,10 +46,9 @@ extension WooVariationApi on WooCommerce {
   /// [stockStatus] Limit result set to products with specified stock status. Options: instock, outofstock and onbackorder.
   ///
   /// [useFaker], fakes the api request
-  Future<List<WooProductVariation>> getProductVaritaions(
-    {
-      required int productId,
-      WooContext context = WooContext.view,
+  Future<List<WooProductVariation>> getProductVaritaions({
+    required int productId,
+    WooContext context = WooContext.view,
     int page = 1,
     int perPage = 10,
     String? search,

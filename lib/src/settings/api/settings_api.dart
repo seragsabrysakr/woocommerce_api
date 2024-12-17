@@ -4,7 +4,7 @@ import '../models/settings.dart';
 
 part 'endpoints.dart';
 
-extension WooSettingsApi on WooCommerce {
+extension WooSettingsApi on FlutterWooCommerce {
   /// Get all settings groups
   Future<List<Setting>> getSettings({bool? useFaker}) async {
     final isUsingFaker = useFaker ?? this.useFaker;
@@ -30,7 +30,9 @@ extension WooSettingsApi on WooCommerce {
     }
 
     final response = await dio.get(_SettingsEndpoints.settings);
-    return (response.data as List).map((json) => Setting.fromJson(json)).toList();
+    return (response.data as List)
+        .map((json) => Setting.fromJson(json))
+        .toList();
   }
 
   /// Get settings for a specific group
@@ -51,7 +53,8 @@ extension WooSettingsApi on WooCommerce {
           links: SettingLinks(
             options: [
               SettingLink(
-                href: 'https://example.com/wp-json/wc/v3/settings/$group/setting_1',
+                href:
+                    'https://example.com/wp-json/wc/v3/settings/$group/setting_1',
               ),
             ],
           ),
@@ -60,7 +63,9 @@ extension WooSettingsApi on WooCommerce {
     }
 
     final response = await dio.get(_SettingsEndpoints.groupSettings(group));
-    return (response.data as List).map((json) => Setting.fromJson(json)).toList();
+    return (response.data as List)
+        .map((json) => Setting.fromJson(json))
+        .toList();
   }
 
   /// Update settings for a specific group
@@ -79,6 +84,8 @@ extension WooSettingsApi on WooCommerce {
       _SettingsEndpoints.groupSettings(group),
       data: settings,
     );
-    return (response.data as List).map((json) => Setting.fromJson(json)).toList();
+    return (response.data as List)
+        .map((json) => Setting.fromJson(json))
+        .toList();
   }
 }

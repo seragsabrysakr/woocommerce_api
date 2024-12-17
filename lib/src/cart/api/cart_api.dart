@@ -2,7 +2,7 @@ import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
 
-extension WooCartApi on WooCommerce {
+extension WooCartApi on FlutterWooCommerce {
   ///
   /// [useFaker], fakes the api request
   Future<WooCart> getCart({

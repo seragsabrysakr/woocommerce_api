@@ -3,7 +3,7 @@ import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
 
-extension WooPaymentApi on WooCommerce {
+extension WooPaymentApi on FlutterWooCommerce {
   /// [context] Scope under which the request is made; determines fields present in response. Options: view and edit. Default is view.
   Future<List<PaymentGateway>> getPaymentGateways({
     WooContext context = WooContext.view,

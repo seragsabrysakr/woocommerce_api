@@ -3,7 +3,7 @@ import 'package:woocommerce_flutter_api/woocommerce_api.dart';
 
 part 'endpoints.dart';
 
-extension WooShippingApi on WooCommerce {
+extension WooShippingApi on FlutterWooCommerce {
   /// Get all shipping zones
   Future<List<ShippingZone>> getShippingZones({bool? useFaker}) async {
     final isUsingFaker = useFaker ?? this.useFaker;

@@ -1,8 +1,10 @@
 import 'package:woocommerce_flutter_api/src/woocommerce_flutter_api_base.dart';
 
 import '../models/currency.dart';
+
 part 'endpoints.dart';
-extension WooCurrencyApi on WooCommerce {
+
+extension WooCurrencyApi on FlutterWooCommerce {
   /// Get current currency
   Future<Currency> getCurrentCurrency({bool? useFaker}) async {
     final isUsingFaker = useFaker ?? this.useFaker;

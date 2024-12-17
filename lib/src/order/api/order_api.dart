@@ -2,7 +2,7 @@ import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
 
-extension WooOrderApi on WooCommerce {
+extension WooOrderApi on FlutterWooCommerce {
   /// [context] Scope under which the request is made; determines fields present in response. Options: view and edit. Default is view.
   ///
   /// [page] Current page of the collection. Default is 1.

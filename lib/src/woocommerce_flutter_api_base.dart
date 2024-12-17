@@ -8,7 +8,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 ///
 /// if you want to call some api that it's not already implemented in
 /// this class you can use [dio] object to call the api
-class WooCommerce {
+class FlutterWooCommerce {
   late final Dio dio;
 
   /// [baseUrl] is the base url of your site. For example, http://me.com or https://me.com.
@@ -34,7 +34,7 @@ class WooCommerce {
   /// [lang], language preference
   final String? lang;
 
-  WooCommerce({
+  FlutterWooCommerce({
     required this.baseUrl,
     required this.username,
     required this.password,
