@@ -464,12 +464,19 @@ extension WooProductApi on FlutterWooCommerce {
     double? maxPrice,
     WooProductStockStatus? stockStatus,
   }) async {
+    List<WooProduct> result = [];
     final dbResult = await IsaarImpl.instance.getAll<WooProduct>();
     if (category != null) {
-      return dbResult
-          .where((element) => element.categories?.first.id == category)
+      final notEmptyCategories = dbResult
+          .where((element) =>
+              element.categories != null && element.categories!.isNotEmpty)
           .toList();
+      if (notEmptyCategories.isNotEmpty) {
+        result.addAll(notEmptyCategories
+            .where((element) => element.categories!.first.id == category)
+            .toList());
+      }
     }
-    return dbResult;
+    return result;
   }
 }
