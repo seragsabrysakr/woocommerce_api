@@ -1,8 +1,10 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 
 part 'product_dimension.g.dart';
 
+@embedded
 @JsonSerializable()
 class WooProductDimension {
   /// Product length.

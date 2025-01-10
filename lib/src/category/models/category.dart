@@ -1,3 +1,4 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 
@@ -7,6 +8,7 @@ import 'category_links.dart';
 
 part 'category.g.dart';
 
+@embedded
 @JsonSerializable()
 class WooProductCategory {
   /// Unique identifier for the resource.
@@ -30,13 +32,15 @@ class WooProductCategory {
   final String? description;
 
   /// Category archive display type. Options: default, products, subcategories and both. Default is default.
+  @enumerated
   @JsonKey(
       name: 'display',
       defaultValue: WooCategoryDisplay.default_,
       fromJson: WooCategoryDisplay.fromString)
-  final WooCategoryDisplay? display;
+  final WooCategoryDisplay display;
 
   /// Image data.
+  @ignore
   @JsonKey(name: 'image')
   final WooProductCategoryImage? image;
 
@@ -49,6 +53,7 @@ class WooProductCategory {
   final int? count;
 
   /// Links to related resources.
+  @ignore
   @JsonKey(name: '_links')
   final WooProductCategoryLinks? links;
 
@@ -58,7 +63,7 @@ class WooProductCategory {
     this.slug,
     this.parent,
     this.description,
-    this.display,
+    this.display = WooCategoryDisplay.default_,
     this.image,
     this.menuOrder,
     this.count,

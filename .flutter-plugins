@@ -1,9 +1,10 @@
 # This is a generated file; do not edit or check into version control.
-flutter_secure_storage=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage-9.2.2/
-flutter_secure_storage_linux=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage_linux-1.2.1/
-flutter_secure_storage_macos=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage_macos-3.1.2/
+flutter_secure_storage=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage-9.2.3/
+flutter_secure_storage_linux=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage_linux-1.2.2/
+flutter_secure_storage_macos=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage_macos-3.1.3/
 flutter_secure_storage_web=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage_web-1.2.1/
 flutter_secure_storage_windows=/Users/seragsakr/.pub-cache/hosted/pub.dev/flutter_secure_storage_windows-3.1.2/
+isar_flutter_libs=/Users/seragsakr/.pub-cache/hosted/pub.isar-community.dev/isar_flutter_libs-3.1.8/
 path_provider=/Users/seragsakr/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
 path_provider_android=/Users/seragsakr/.pub-cache/hosted/pub.dev/path_provider_android-2.2.15/
 path_provider_foundation=/Users/seragsakr/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/

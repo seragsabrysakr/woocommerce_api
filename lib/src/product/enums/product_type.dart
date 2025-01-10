@@ -4,6 +4,7 @@ enum WooProductType {
   simple,
   grouped,
   external,
+  composite,
   variable;
 
   static WooProductType fake() {
@@ -23,6 +24,9 @@ enum WooProductType {
     if (type == 'variable') {
       return WooProductType.variable;
     }
+    if (type == 'composite') {
+      return WooProductType.composite;
+    }
     return WooProductType.simple;
   }
 
@@ -35,6 +39,8 @@ enum WooProductType {
         return 'grouped';
       case WooProductType.external:
         return 'external';
+      case WooProductType.composite:
+        return 'composite';
       case WooProductType.variable:
         return 'variable';
     }

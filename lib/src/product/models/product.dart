@@ -1,3 +1,4 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/base/models/metadata.dart';
 import 'package:woocommerce_flutter_api/src/category/models/category.dart';
@@ -16,11 +17,14 @@ import 'package:woocommerce_flutter_api/src/product/models/product_item_tag.dart
 
 part 'product.g.dart';
 
+@collection
 @JsonSerializable()
 class WooProduct {
+  bool? isFavorite;
+
   /// Unique identifier for the resource.
   @JsonKey(name: 'id')
-  final int? id;
+  final Id id;
 
   /// Product name.
   @JsonKey(name: 'name')
@@ -51,20 +55,25 @@ class WooProduct {
   DateTime? dateModifiedGmt;
 
   /// Product type. Options: simple, grouped, external and variable. Default is simple.
-  @JsonKey(name: 'type')
-  final WooProductType? type;
+  @enumerated
+  @JsonKey(name: 'type', fromJson: WooProductType.fromString)
+  final WooProductType type;
 
   /// Product status (post status). Options: draft, pending, private and publish. Default is publish.
-  @JsonKey(name: 'status')
-  final WooProductStatus? status;
+  @enumerated
+  @JsonKey(name: 'status', fromJson: WooProductStatus.fromString)
+  final WooProductStatus status;
 
   /// Featured product. Default is false.
   @JsonKey(name: 'featured')
   final bool? featured;
 
   /// Catalog visibility. Options: visible, catalog, search and hidden. Default is visible.
-  @JsonKey(name: 'catalog_visibility')
-  final WooProductCatalogVisibility? catalogVisibility;
+  @enumerated
+  @JsonKey(
+      name: 'catalog_visibility',
+      fromJson: WooProductCatalogVisibility.fromString)
+  final WooProductCatalogVisibility catalogVisibility;
 
   /// Product description.
   @JsonKey(name: 'description')
@@ -151,8 +160,9 @@ class WooProduct {
   final String? buttonText;
 
   /// Tax status. Options: taxable, shipping and none. Default is taxable.
-  @JsonKey(name: 'tax_status')
-  final WooProductTaxStatus? taxStatus;
+  @enumerated
+  @JsonKey(name: 'tax_status', fromJson: WooProductTaxStatus.fromString)
+  final WooProductTaxStatus taxStatus;
 
   /// Tax class.
   @JsonKey(name: 'tax_class')
@@ -167,12 +177,14 @@ class WooProduct {
   final int? stockQuantity;
 
   /// Controls the stock status of the product. Options: instock, outofstock, onbackorder. Default is instock.
-  @JsonKey(name: 'stock_status')
-  final WooProductStockStatus? stockStatus;
+  @enumerated
+  @JsonKey(name: 'stock_status', fromJson: WooProductStockStatus.fromString)
+  final WooProductStockStatus stockStatus;
 
   /// If managing stock, this controls if backorders are allowed. Options: no, notify and yes. Default is no.
-  @JsonKey(name: 'backorders')
-  final WooProductBackorder? backorders;
+  @enumerated
+  @JsonKey(name: 'backorders', fromJson: WooProductBackorder.fromString)
+  final WooProductBackorder backorders;
 
   /// Shows if backorders are allowed.
   @JsonKey(name: 'backorders_allowed')
@@ -287,12 +299,13 @@ class WooProduct {
 
   @JsonKey(name: 'bonuses')
   final int? bonuses;
-
+  @ignore
   @JsonKey(name: 'day_schedules')
   final Map<DayOfWeek, DaySchedule>? daySchedules;
 
   WooProduct({
-    this.id,
+    this.isFavorite = false,
+    this.id = Isar.autoIncrement,
     this.name,
     this.slug,
     this.permalink,
@@ -300,10 +313,10 @@ class WooProduct {
     this.dateCreatedGmt,
     this.dateModified,
     this.dateModifiedGmt,
-    this.type,
-    this.status,
+    this.type = WooProductType.simple,
+    this.status = WooProductStatus.publish,
     this.featured,
-    this.catalogVisibility,
+    this.catalogVisibility = WooProductCatalogVisibility.visible,
     this.description,
     this.shortDescription,
     this.sku,
@@ -325,12 +338,12 @@ class WooProduct {
     this.downloadExpiry,
     this.externalUrl,
     this.buttonText,
-    this.taxStatus,
+    this.taxStatus = WooProductTaxStatus.taxable,
     this.taxClass,
     this.manageStock,
     this.stockQuantity,
-    this.stockStatus,
-    this.backorders,
+    this.stockStatus = WooProductStockStatus.instock,
+    this.backorders = WooProductBackorder.no,
     this.backordersAllowed,
     this.backordered,
     this.soldIndividually,
@@ -453,8 +466,8 @@ class WooProduct {
         groupedProducts: List.generate(3, (index) => FakeHelper.integer()),
         menuOrder: FakeHelper.integer(),
         metaData: List.generate(3, (index) => WooMetaData.fake()),
-        alergeny: List.generate(3, (index) => Alergen.fake()),
-        freeProducts: List.generate(3, (index) => FreeProduct.fake()),
+        // alergeny: List.generate(3, (index) => Alergen.fake()),
+        // freeProducts: List.generate(3, (index) => FreeProduct.fake()),
         bonuses: FakeHelper.integer(),
         daySchedules: {
           DayOfWeek.monday: DaySchedule.fake(),
@@ -468,46 +481,47 @@ class WooProduct {
       );
 }
 
+@embedded
 @JsonSerializable()
 class FreeProduct {
-  FreeProduct(
+  final int? count;
+  final int? id;
+  FreeProduct({
     this.count,
     this.id,
-  );
+  });
 
   factory FreeProduct.fromJson(Map<String, dynamic> json) =>
       _$FreeProductFromJson(json);
 
-  final int count;
-  final int id;
-
   Map<String, dynamic> toJson() => _$FreeProductToJson(this);
 
-  static FreeProduct fake() =>
-      FreeProduct(FakeHelper.integer(), FakeHelper.integer());
+  // static FreeProduct fake() =>
+  //     FreeProduct(FakeHelper.integer(), FakeHelper.integer());
 }
 
+@embedded
 @JsonSerializable()
 class Alergen {
-  Alergen(
+  Alergen({
     this.id,
     this.name,
     this.slug,
     this.alergen,
-  );
+  });
 
   factory Alergen.fromJson(Map<String, dynamic> json) =>
       _$AlergenFromJson(json);
 
-  final int id;
-  final String name;
-  final String slug;
-  final String alergen;
+  final int? id;
+  final String? name;
+  final String? slug;
+  final String? alergen;
 
   Map<String, dynamic> toJson() => _$AlergenToJson(this);
 
-  static Alergen fake() => Alergen(FakeHelper.integer(), FakeHelper.word(),
-      FakeHelper.word(), FakeHelper.word());
+  // static Alergen fake() => Alergen(FakeHelper.integer(), FakeHelper.word(),
+  //     FakeHelper.word(), FakeHelper.word());
 }
 
 @JsonSerializable()

@@ -1,8 +1,10 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 
 part 'product_image.g.dart';
 
+@embedded
 @JsonSerializable()
 class WooProductImage {
   /// Image ID.
@@ -11,19 +13,19 @@ class WooProductImage {
 
   /// The date the image was created, in the site's timezone.
   @JsonKey(name: 'date_created')
-  final DateTime dateCreated;
+  final DateTime? dateCreated;
 
   /// The date the image was created, as GMT.
   @JsonKey(name: 'date_created_gmt')
-  final DateTime dateCreatedGMT;
+  final DateTime? dateCreatedGMT;
 
   /// The date the image was last modified, in the site's timezone.
   @JsonKey(name: 'date_modified')
-  final DateTime dateModified;
+  final DateTime? dateModified;
 
   /// The date the image was last modified, as GMT.
   @JsonKey(name: 'date_modified_gmt')
-  final DateTime dateModifiedGMT;
+  final DateTime? dateModifiedGMT;
 
   /// Image URL.
   @JsonKey(name: 'src')
@@ -39,16 +41,17 @@ class WooProductImage {
 
   WooProductImage({
     this.id,
-    required this.dateCreated,
-    required this.dateCreatedGMT,
-    required this.dateModified,
-    required this.dateModifiedGMT,
+    this.dateCreated,
+    this.dateCreatedGMT,
+    this.dateModified,
+    this.dateModifiedGMT,
     this.src,
     this.name,
     this.alt,
   });
 
-  factory WooProductImage.fromJson(Map<String, dynamic> json) => _$WooProductImageFromJson(json);
+  factory WooProductImage.fromJson(Map<String, dynamic> json) =>
+      _$WooProductImageFromJson(json);
 
   Map<String, dynamic> toJson() => _$WooProductImageToJson(this);
 

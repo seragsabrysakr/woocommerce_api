@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:woocommerce_flutter_api/src/local_db/db/isar_db.dart';
+import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 /// The class that holds all of the methods
 ///
@@ -32,7 +35,7 @@ class FlutterWooCommerce {
   final bool useFaker;
 
   /// [lang], language preference
-  final String? lang;
+  final Lang lang;
 
   FlutterWooCommerce({
     required this.baseUrl,
@@ -41,14 +44,14 @@ class FlutterWooCommerce {
     this.apiPath = '/wp-json/wc/v3',
     this.isDebug = true,
     this.useFaker = false,
-    this.lang,
+    this.lang = Lang.ar,
   }) {
     final authToken = base64.encode(utf8.encode('$username:$password'));
     dio = Dio(
       BaseOptions(baseUrl: '$baseUrl$apiPath', headers: {
         HttpHeaders.authorizationHeader: 'Basic $authToken',
       }, queryParameters: {
-        if (lang?.isNotEmpty == true) 'lang': lang
+        'lang': lang.name
       }),
     );
 
@@ -59,5 +62,15 @@ class FlutterWooCommerce {
         responseBody: true,
       ));
     }
+    try {
+      IsaarImpl.instance.openObject(
+        schemas: [WooProductSchema],
+        name: 'woocommerce_flutter_api',
+      );
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }
+
+enum Lang { ar, en }

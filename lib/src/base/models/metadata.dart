@@ -1,8 +1,10 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 
 part 'metadata.g.dart';
 
+@embedded
 @JsonSerializable()
 class WooMetaData {
   /// Meta ID.
@@ -14,6 +16,7 @@ class WooMetaData {
   final String? key;
 
   /// Meta value.
+  @ignore
   @JsonKey(name: 'value')
   final dynamic value;
 

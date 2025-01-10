@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:woocommerce_flutter_api/src/local_db/db/isar_db.dart';
 import 'package:woocommerce_flutter_api/src/product/models/product_with_childrens.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
@@ -102,53 +103,108 @@ extension WooProductApi on FlutterWooCommerce {
     double? maxPrice,
     WooProductStockStatus? stockStatus,
     bool? useFaker,
+    bool clear = false,
   }) async {
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
       return List.generate(perPage, (index) => WooProduct.fake());
     }
+    if (clear) {
+      await IsaarImpl.instance.deleteAll<WooProduct>();
+    }
+    // final dbResult = await IsaarImpl().getAll<WooProduct>();
 
-    final response = await dio.get(
-      _ProductEndpoints.products,
-      queryParameters: _resolveQueryParametersForGettingProducts(
-        context: context,
-        page: page,
-        perPage: perPage,
-        search: search,
-        after: after,
-        before: before,
-        modifiedAfter: modifiedAfter,
-        modifiedBefore: modifiedBefore,
-        datesAreGmt: datesAreGmt,
-        exclude: exclude,
-        include: include,
-        offset: offset,
-        order: order,
-        orderBy: orderBy,
-        parent: parent,
-        parentExclude: parentExclude,
-        slug: slug,
-        status: status,
-        type: type,
-        sku: sku,
-        featured: featured,
-        category: category,
-        tag: tag,
-        shippingClass: shippingClass,
-        attribute: attribute,
-        attributeTerm: attributeTerm,
-        taxClass: taxClass,
-        onSale: onSale,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        stockStatus: stockStatus,
-      ),
+    final dbResult = await _resolveQueryParametersForProductsFromLocalDataBase(
+      context: context,
+      page: page,
+      perPage: perPage,
+      search: search,
+      after: after,
+      before: before,
+      modifiedAfter: modifiedAfter,
+      modifiedBefore: modifiedBefore,
+      datesAreGmt: datesAreGmt,
+      exclude: exclude,
+      include: include,
+      offset: offset,
+      order: order,
+      orderBy: orderBy,
+      parent: parent,
+      parentExclude: parentExclude,
+      slug: slug,
+      status: status,
+      type: type,
+      sku: sku,
+      featured: featured,
+      category: category,
+      tag: tag,
+      shippingClass: shippingClass,
+      attribute: attribute,
+      attributeTerm: attributeTerm,
+      taxClass: taxClass,
+      onSale: onSale,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      stockStatus: stockStatus,
     );
+    if (dbResult.isNotEmpty) {
+      return dbResult;
+    }
+    List<WooProduct> allProducts = [];
+    int currentPage = 1;
 
-    return (response.data as List)
-        .map((item) => WooProduct.fromJson(item))
-        .toList();
+    while (true) {
+      final response = await dio.get(
+        _ProductEndpoints.products,
+        queryParameters: _resolveQueryParametersForGettingProducts(
+          context: context,
+          page: currentPage,
+          perPage: perPage,
+          search: search,
+          after: after,
+          before: before,
+          modifiedAfter: modifiedAfter,
+          modifiedBefore: modifiedBefore,
+          datesAreGmt: datesAreGmt,
+          exclude: exclude,
+          include: include,
+          offset: offset,
+          order: order,
+          orderBy: orderBy,
+          parent: parent,
+          parentExclude: parentExclude,
+          slug: slug,
+          status: status,
+          type: type,
+          sku: sku,
+          featured: featured,
+          category: category,
+          tag: tag,
+          shippingClass: shippingClass,
+          attribute: attribute,
+          attributeTerm: attributeTerm,
+          taxClass: taxClass,
+          onSale: onSale,
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          stockStatus: stockStatus,
+        ),
+      );
+
+      final List<WooProduct> fetchedProducts = (response.data as List)
+          .map((item) => WooProduct.fromJson(item))
+          .toList();
+      await IsaarImpl.instance
+          .writeOrUpdateAll<WooProduct>(objects: fetchedProducts);
+
+      if (fetchedProducts.isEmpty) {
+        break; // Exit the loop if no more products are returned
+      }
+      allProducts.addAll(fetchedProducts);
+      currentPage++;
+    }
+    return allProducts;
   }
 
   Map<String, dynamic> _resolveQueryParametersForGettingProducts({
@@ -297,17 +353,27 @@ extension WooProductApi on FlutterWooCommerce {
   }
 
   Future<WooProduct> getProduct({required int id, bool? useFaker}) async {
-    final isUsingFaker = useFaker ?? this.useFaker;
-
-    if (isUsingFaker) {
-      return WooProduct.fake();
+    // final isUsingFaker = useFaker ?? this.useFaker;
+    final responseDB = await IsaarImpl.instance.getById<WooProduct>(id: id);
+    if (responseDB != null) {
+      return responseDB;
     }
-
     final response = await dio.get(
       _ProductEndpoints.singleProduct(id),
     );
 
     return WooProduct.fromJson(response.data);
+  }
+
+  Stream<List<WooProduct>> getFavoriteProduct(int productId) =>
+      IsaarImpl.instance.getFavoriteProduct(productId);
+
+  Stream<List<WooProduct>> favoriteProductsStream() =>
+      IsaarImpl.instance.favoriteProductsStream();
+
+  Future<void> toggleFavoriteProduct({required WooProduct product}) async {
+    product.isFavorite = !(product.isFavorite ?? false);
+    await IsaarImpl.instance.writeOrUpdate<WooProduct>(object: product);
   }
 
   /// gets a product with related products
@@ -336,7 +402,7 @@ extension WooProductApi on FlutterWooCommerce {
   Map<String, dynamic> _resolveQueryParametersForGettingProductWithOption(
       List<WooProductFilterWithType> options, WooProduct product) {
     final map = <String, dynamic>{};
-    final includes = <int>[product.id!];
+    final includes = <int>[product.id];
 
     for (final option in options) {
       if (option == WooProductFilterWithType.crossSellIds) {
@@ -363,5 +429,47 @@ extension WooProductApi on FlutterWooCommerce {
     map['include'] = includes.join(',');
 
     return map;
+  }
+
+  Future<List<WooProduct>> _resolveQueryParametersForProductsFromLocalDataBase({
+    required WooContext context,
+    required int page,
+    required int perPage,
+    String? search,
+    DateTime? after,
+    DateTime? before,
+    DateTime? modifiedAfter,
+    DateTime? modifiedBefore,
+    bool? datesAreGmt,
+    List<int>? exclude,
+    List<int>? include,
+    int? offset,
+    required WooSortOrder order,
+    required WooSortOrderBy orderBy,
+    List<int>? parent,
+    List<int>? parentExclude,
+    String? slug,
+    required WooFilterStatus status,
+    WooProductType? type,
+    String? sku,
+    bool? featured,
+    int? category,
+    String? tag,
+    int? shippingClass,
+    String? attribute,
+    String? attributeTerm,
+    String? taxClass,
+    bool? onSale,
+    double? minPrice,
+    double? maxPrice,
+    WooProductStockStatus? stockStatus,
+  }) async {
+    final dbResult = await IsaarImpl.instance.getAll<WooProduct>();
+    if (category != null) {
+      return dbResult
+          .where((element) => element.categories?.first.id == category)
+          .toList();
+    }
+    return dbResult;
   }
 }
