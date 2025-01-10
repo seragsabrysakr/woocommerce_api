@@ -476,6 +476,8 @@ extension WooProductApi on FlutterWooCommerce {
             .where((element) => element.categories!.first.id == category)
             .toList());
       }
+    } else {
+      result.addAll(dbResult);
     }
     return result;
   }
