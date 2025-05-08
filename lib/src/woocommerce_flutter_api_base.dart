@@ -11,6 +11,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 class FlutterWooCommerce {
   static late String consumerKey;
   static late String consumerSecret;
+  static late String url;
 
   late final Dio dio;
 
@@ -36,7 +37,7 @@ class FlutterWooCommerce {
     consumerSecret = password;
 
     final authToken = base64.encode(utf8.encode('$username:$password'));
-
+    url = '$baseUrl$apiPath';
     dio = Dio(
       BaseOptions(
         validateStatus: (status) => status != null && status < 500,

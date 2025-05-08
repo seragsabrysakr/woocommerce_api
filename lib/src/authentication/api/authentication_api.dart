@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 import 'package:woocommerce_flutter_api/src/extensions/string_extensions.dart';
@@ -113,6 +116,11 @@ extension WooAuthenticationApi on FlutterWooCommerce {
   }
 
   Future<int?> getUserInfo(String email) async {
+    final authToken = base64.encode(utf8.encode('$username:$password'));
+    dio.options.headers = {
+      HttpHeaders.authorizationHeader: 'Basic $authToken',
+    };
+    dio.options.baseUrl = FlutterWooCommerce.url;
     try {
       final response =
           await dio.get(_AuthenticationEndpoints.getUserInfo, queryParameters: {
