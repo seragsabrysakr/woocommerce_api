@@ -16,11 +16,6 @@ void main() async {
     role: 'customer',
     username: "seragSakr",
     password: "Srag123",
-    billing: WooBilling.fake(),
-    shipping: WooShipping.fake(),
-    avatarUrl: FakeHelper.word(),
-    metaData: List.generate(3, (index) => WooMetaData.fake()),
-    isPayingCustomer: FakeHelper.boolean(),
   );
   try {
     final res = await flutterWoocommerce.register(customer);
