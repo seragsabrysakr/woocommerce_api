@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
@@ -49,27 +50,40 @@ extension WooCategoryApi on FlutterWooCommerce {
       return List.generate(perPage, (index) => WooProductCategory.fake());
     }
 
-    final response = await dio.get(
-      _CategoryEndpoints.categories,
-      queryParameters: _resolveQueryParametersForGettingCategories(
-        context: context,
-        page: page,
-        perPage: perPage,
-        search: search,
-        exclude: exclude,
-        include: include,
-        order: order,
-        orderBy: orderBy,
-        hideEmpty: hideEmpty,
-        parent: parent,
-        product: product,
-        slug: slug,
-      ),
-    );
-
-    return (response.data as List)
-        .map((item) => WooProductCategory.fromJson(item))
-        .toList();
+    try {
+      final response = await dio.get(
+        _CategoryEndpoints.categories,
+        queryParameters: _resolveQueryParametersForGettingCategories(
+          context: context,
+          page: page,
+          perPage: perPage,
+          search: search,
+          exclude: exclude,
+          include: include,
+          order: order,
+          orderBy: orderBy,
+          hideEmpty: hideEmpty,
+          parent: parent,
+          product: product,
+          slug: slug,
+        ),
+      );
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return (response.data as List)
+            .map((item) => WooProductCategory.fromJson(item))
+            .toList();
+      } else {
+        throw Exception(
+            "API call failed with status code: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
   }
 
   Map<String, dynamic> _resolveQueryParametersForGettingCategories({
@@ -132,8 +146,21 @@ extension WooCategoryApi on FlutterWooCommerce {
       return WooProductCategory.fake();
     }
 
-    final response = await dio.get(_CategoryEndpoints.singleCategory(id));
-
-    return WooProductCategory.fromJson(response.data);
+    try {
+      final response = await dio.get(_CategoryEndpoints.singleCategory(id));
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return WooProductCategory.fromJson(response.data);
+      } else {
+        throw Exception(
+            "API call failed with status code: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
   }
 }

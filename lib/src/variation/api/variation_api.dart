@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
@@ -71,13 +72,16 @@ extension WooVariationApi on FlutterWooCommerce {
     WooProductStockStatus? stockStatus,
     bool? useFaker,
   }) async {
+
+
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
       return List.generate(perPage, (index) => WooProductVariation.fake());
     }
 
-    final response = await dio.get(
+    try {
+           final response = await dio.get(
       _VariationEndpoints.variations(productId),
       queryParameters: _resolveQueryParametersForGettingProducts(
         context: context,
@@ -104,9 +108,23 @@ extension WooVariationApi on FlutterWooCommerce {
       ),
     );
 
-    return (response.data as List)
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+         return (response.data as List)
         .map((item) => WooProductVariation.fromJson(item))
         .toList();
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+   
+   
   }
 
   Map<String, dynamic> _resolveQueryParametersForGettingProducts({
@@ -203,17 +221,4 @@ extension WooVariationApi on FlutterWooCommerce {
     return map;
   }
 
-  Future<WooProductVariation> getProductVariation(int productId, int id,
-      {bool? useFaker}) async {
-    final isUsingFaker = useFaker ?? this.useFaker;
-
-    if (isUsingFaker) {
-      return WooProductVariation.fake();
-    }
-
-    final response =
-        await dio.get(_VariationEndpoints.singleVariation(productId, id));
-
-    return WooProductVariation.fromJson(response.data as Map<String, dynamic>);
-  }
 }

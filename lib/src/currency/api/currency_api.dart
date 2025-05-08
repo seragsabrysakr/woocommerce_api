@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/src/woocommerce_flutter_api_base.dart';
 
 import '../models/currency.dart';
@@ -30,15 +31,32 @@ extension WooCurrencyApi on FlutterWooCommerce {
       );
     }
 
+    try {
     final response = await dio.get(_CurrencyEndpoints.currentCurrency);
-    return Currency.fromJson(response.data);
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return Currency.fromJson(response.data);
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
   }
+
+
 
   /// Get currency by code
   Future<Currency> getCurrency({
     required String code,
     bool? useFaker,
   }) async {
+
+
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
@@ -62,8 +80,21 @@ extension WooCurrencyApi on FlutterWooCommerce {
       );
     }
 
+    try {
     final response = await dio.get(_CurrencyEndpoints.currency(code));
-    return Currency.fromJson(response.data);
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return Currency.fromJson(response.data);
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
   }
 
   /// Get all available currencies
@@ -111,9 +142,22 @@ extension WooCurrencyApi on FlutterWooCommerce {
       ];
     }
 
-    final response = await dio.get(_CurrencyEndpoints.allCurrencies);
-    return (response.data as List)
-        .map((currency) => Currency.fromJson(currency))
-        .toList();
+    try {
+          final response = await dio.get(_CurrencyEndpoints.allCurrencies);
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return  response.data.map((currency) => Currency.fromJson(currency)).toList();
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
   }
+
+
 }

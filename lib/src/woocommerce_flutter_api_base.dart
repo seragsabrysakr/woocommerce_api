@@ -39,6 +39,7 @@ class FlutterWooCommerce {
 
     dio = Dio(
       BaseOptions(
+        validateStatus: (status) => status != null && status < 500,
         baseUrl: '$baseUrl$apiPath',
         headers: {
           HttpHeaders.authorizationHeader: 'Basic $authToken',

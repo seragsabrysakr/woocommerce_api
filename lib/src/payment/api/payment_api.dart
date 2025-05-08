@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/src/payment/models/payment_gateway.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
@@ -15,16 +16,23 @@ extension WooPaymentApi on FlutterWooCommerce {
       return List.generate(5, (index) => PaymentGateway.fake());
     }
 
-    final response = await dio.get(
-      _PaymentEndpoints.payments,
-      queryParameters: {
-        'context': context.name,
-      },
-    );
+    try {
+      final response = await dio.get(
+        _PaymentEndpoints.payments,
+        queryParameters: {
+          'context': context.name,
+        },
+      );
 
-    return (response.data as List)
-        .map((json) => PaymentGateway.fromJson(json))
-        .toList();
+      return (response.data as List)
+          .map((json) => PaymentGateway.fromJson(json))
+          .toList();
+    } on DioException catch (e) {
+      throw Exception(
+          "API call failed: " + e.response?.data["message"] ?? e.message);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
   }
 
   /// Get a specific payment gateway by ID
@@ -38,8 +46,15 @@ extension WooPaymentApi on FlutterWooCommerce {
       return PaymentGateway.fake();
     }
 
-    final response = await dio.get(_PaymentEndpoints.singlePayment(id));
-    return PaymentGateway.fromJson(response.data);
+    try {
+      final response = await dio.get(_PaymentEndpoints.singlePayment(id));
+      return PaymentGateway.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception(
+          "API call failed: " + e.response?.data["message"] ?? e.message);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
   }
 
   /// Update a payment gateway
@@ -54,11 +69,18 @@ extension WooPaymentApi on FlutterWooCommerce {
       return PaymentGateway.fake();
     }
 
-    final response = await dio.put(
-      _PaymentEndpoints.singlePayment(id),
-      data: data,
-    );
+    try {
+      final response = await dio.put(
+        _PaymentEndpoints.singlePayment(id),
+        data: data,
+      );
 
-    return PaymentGateway.fromJson(response.data);
+      return PaymentGateway.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception(
+          "API call failed: " + e.response?.data["message"] ?? e.message);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
   }
 }

@@ -22,8 +22,12 @@ void main() async {
     metaData: List.generate(3, (index) => WooMetaData.fake()),
     isPayingCustomer: FakeHelper.boolean(),
   );
-  final products = await flutterWoocommerce.getProducts();
-  print(products.toString());
+  try {
+    final res = await flutterWoocommerce.register(customer);
+    print(res.toString());
+  } catch (e) {
+    print(e.toString().cleanErrorMessage);
+  }
   return;
   final token = await flutterWoocommerce.createUserToken(
       userName: "seragSakr", password: "Srag123");

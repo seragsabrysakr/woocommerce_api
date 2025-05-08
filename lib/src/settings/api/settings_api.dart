@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/src/woocommerce_flutter_api_base.dart';
 
 import '../models/settings.dart';
@@ -29,17 +30,33 @@ extension WooSettingsApi on FlutterWooCommerce {
       ];
     }
 
+    try {
     final response = await dio.get(_SettingsEndpoints.settings);
-    return (response.data as List)
-        .map((json) => Setting.fromJson(json))
-        .toList();
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return response.data.map((json) => Setting.fromJson(json)).toList();
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+        
   }
+
+
 
   /// Get settings for a specific group
   Future<List<Setting>> getGroupSettings({
     required String group,
     bool? useFaker,
   }) async {
+
+
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
@@ -62,10 +79,22 @@ extension WooSettingsApi on FlutterWooCommerce {
       ];
     }
 
-    final response = await dio.get(_SettingsEndpoints.groupSettings(group));
-    return (response.data as List)
-        .map((json) => Setting.fromJson(json))
-        .toList();
+    try {
+          final response = await dio.get(_SettingsEndpoints.groupSettings(group));
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return response.data.map((json) => Setting.fromJson(json)).toList();
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+    
   }
 
   /// Update settings for a specific group
@@ -74,18 +103,32 @@ extension WooSettingsApi on FlutterWooCommerce {
     required Map<String, dynamic> settings,
     bool? useFaker,
   }) async {
+
+
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
       return [Setting.fake()];
     }
 
-    final response = await dio.post(
+    try {
+          final response = await dio.post(
       _SettingsEndpoints.groupSettings(group),
       data: settings,
     );
-    return (response.data as List)
-        .map((json) => Setting.fromJson(json))
-        .toList();
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return response.data.map((json) => Setting.fromJson(json)).toList();
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+    
   }
 }

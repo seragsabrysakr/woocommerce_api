@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/src/product/models/product_with_childrens.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
@@ -103,13 +104,16 @@ extension WooProductApi on FlutterWooCommerce {
     WooProductStockStatus? stockStatus,
     bool? useFaker,
   }) async {
+
+
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
       return List.generate(perPage, (index) => WooProduct.fake());
     }
 
-    final response = await dio.get(
+    try {
+          final response = await dio.get(
       _ProductEndpoints.products,
       queryParameters: _resolveQueryParametersForGettingProducts(
         context: context,
@@ -145,10 +149,24 @@ extension WooProductApi on FlutterWooCommerce {
         stockStatus: stockStatus,
       ),
     );
-
-    return (response.data as List)
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+       return (response.data as List)
         .map((item) => WooProduct.fromJson(item))
         .toList();
+      } else {
+        throw Exception("API call failed with status code: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
+    
+
+    
   }
 
   Map<String, dynamic> _resolveQueryParametersForGettingProducts({
@@ -303,12 +321,28 @@ extension WooProductApi on FlutterWooCommerce {
       return WooProduct.fake();
     }
 
-    final response = await dio.get(
-      _ProductEndpoints.singleProduct(id),
-    );
+    try {
+      final response = await dio.get(
+        _ProductEndpoints.singleProduct(id),
+      );
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+return WooProduct.fromJson(response.data);      } else {
+        throw Exception("API call failed with status code: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
+    
 
-    return WooProduct.fromJson(response.data);
+    
   }
+
+
 
   /// gets a product with related products
   ///
@@ -325,13 +359,29 @@ extension WooProductApi on FlutterWooCommerce {
       return WooProductWithChildrens.fake().copyWith(mainProduct: product);
     }
 
-    final response = await dio.get(_ProductEndpoints.products,
-        queryParameters:
-            _resolveQueryParametersForGettingProductWithOption(types, product));
+    try {
+      final response = await dio.get(_ProductEndpoints.products,
+      queryParameters: _resolveQueryParametersForGettingProductWithOption(types, product));
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        
+        return WooProductWithChildrens.fromData(
+            response.data as List<Map<String, dynamic>>, product);
+      } else {
+        throw Exception("API call failed with status code: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: $e");
+    }
+    
 
-    return WooProductWithChildrens.fromData(
-        response.data as List<Map<String, dynamic>>, product);
   }
+
+
 
   Map<String, dynamic> _resolveQueryParametersForGettingProductWithOption(
       List<WooProductFilterWithType> options, WooProduct product) {

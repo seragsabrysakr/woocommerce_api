@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'endpoints.dart';
@@ -67,15 +68,17 @@ extension WooOrderApi on FlutterWooCommerce {
     int? dp,
     bool? useFaker,
   }) async {
+
+
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
       return List.generate(perPage, (index) => WooOrder.fake());
     }
 
-    final response = await dio.get(
-      _OrderEndpoints.orders,
-      queryParameters: _resolveQueryParametersForGettingOrders(
+    try {
+          final response = await dio.get(
+ _OrderEndpoints.orders,      queryParameters: _resolveQueryParametersForGettingOrders(
         context: context,
         page: page,
         perPage: perPage,
@@ -98,10 +101,20 @@ extension WooOrderApi on FlutterWooCommerce {
         dp: dp,
       ),
     );
-
-    return (response.data as List)
-        .map((item) => WooOrder.fromJson(item))
-        .toList();
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return response.data.map((item) => WooOrder.fromJson(item)).toList();
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+ 
   }
 
   Map<String, dynamic> _resolveQueryParametersForGettingOrders({
@@ -201,10 +214,25 @@ extension WooOrderApi on FlutterWooCommerce {
       return WooOrder.fake();
     }
 
-    final response = await dio.get(_OrderEndpoints.singleOrder(id));
-
-    return WooOrder.fromJson(response.data as Map<String, dynamic>);
+    try {
+          final response = await dio.get(_OrderEndpoints.singleOrder(id));
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return WooOrder.fromJson(response.data as Map<String, dynamic>);
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+ 
   }
+
+
 
   Future<WooOrder> createOrder(
       {required WooOrder order, bool? useFaker}) async {
@@ -214,13 +242,28 @@ extension WooOrderApi on FlutterWooCommerce {
       return order;
     }
 
-    final response = await dio.post(
+    try {
+          final response = await dio.post(
       _OrderEndpoints.orders,
       data: order.toJson(),
     );
-
-    return WooOrder.fromJson(response.data as Map<String, dynamic>);
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return WooOrder.fromJson(response.data as Map<String, dynamic>);
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+ 
   }
+
+
 
   Future<WooOrder> updateOrder(
       {required WooOrder order, bool? useFaker}) async {
@@ -230,13 +273,28 @@ extension WooOrderApi on FlutterWooCommerce {
       return order;
     }
 
-    final response = await dio.put(
-      _OrderEndpoints.orders,
+    try {
+          final response = await dio.put(
+ _OrderEndpoints.orders,
       data: order.toJson(),
     );
-
-    return WooOrder.fromJson(response.data as Map<String, dynamic>);
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return WooOrder.fromJson(response.data as Map<String, dynamic>);
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+ 
   }
+
+
 
   /// [force] Use true whether to permanently delete the order, Default is false.
   Future<bool> deleteOrder({
@@ -244,18 +302,35 @@ extension WooOrderApi on FlutterWooCommerce {
     bool? useFaker,
     bool force = false,
   }) async {
+
+
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
       return true;
     }
 
-    await dio.delete(
-      _OrderEndpoints.singleOrder(id),
+    try {
+          final response = await dio.delete(
+      _OrderEndpoints.orders,
       queryParameters: {
         'force': force,
       },
     );
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return true;
+      } else {
+        throw Exception("API call failed with status code: " + response.statusCode.toString());
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data["message"] ?? e.message;
+      throw Exception("API call failed: " + errorMsg);
+    } catch (e) {
+      throw Exception("Unexpected error in API call: " + e.toString());
+    }
+    
 
     return true;
   }
