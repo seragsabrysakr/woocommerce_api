@@ -11,7 +11,7 @@ final jwtApi = 'https://www.ehabcenter.com/wp-json/';
 
 extension WooAuthenticationApi on FlutterWooCommerce {
   //logIn
-  Future<String> createUserToken({
+  Future<Map<String, dynamic>> createUserToken({
     required String userName,
     required String password,
   }) async {
@@ -27,7 +27,7 @@ extension WooAuthenticationApi on FlutterWooCommerce {
             (response.data as Map<String, dynamic>)['token'] as String?;
         if (token != null) {
           print('create token success');
-          return token.toString();
+          return response.data as Map<String, dynamic>;
         } else {
           print('token data null');
           throw Exception('Token data is null');

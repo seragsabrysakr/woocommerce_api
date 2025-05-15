@@ -25,14 +25,15 @@ void main() async {
   //   print(e.toString().cleanErrorMessage);
   // }
   // return;
-  final token = await flutterWoocommerce.createUserToken(
+  final data = await flutterWoocommerce.createUserToken(
       userName: "seragSakr", password: "Srag123");
-  print(token.toString());
-
+  print(data["token"].toString());
+  final token = data["token"];
+  final userEmail = data["user_email"];
   final verifyToken = await flutterWoocommerce.verifyUserToken(token: token);
   if (verifyToken) {
-    final userId = await flutterWoocommerce.getUserInfo("srag.sabry@gmail.com");
+    final userId = await flutterWoocommerce.getUserInfo(userEmail);
     print(userId.toString());
   }
-  final products = await flutterWoocommerce.getProducts();
+  // final products = await flutterWoocommerce.getProducts();
 }
