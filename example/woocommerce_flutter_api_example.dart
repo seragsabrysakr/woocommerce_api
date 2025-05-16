@@ -10,23 +10,23 @@ void main() async {
   );
 
   WooCustomer customer = WooCustomer(
-    email: "srag.sabry50@gmail.com",
-    firstName: "serag",
-    lastName: "sakr",
+    email: "srag.sabry5qq0@gmail.com",
+    firstName: "seraqqg",
+    lastName: "sakqqr",
     role: 'customer',
-    username: "seragSakr50",
-    password: "Srag123",
+    username: "seragSaqqkr50",
+    password: "Srag12qq3",
   );
 
   // try {
-  // final res = await flutterWoocommerce.register(customer);
+  //   final res = await flutterWoocommerce.register(customer);
   //   print(res.toString());
   // } catch (e) {
   //   print(e.toString().cleanErrorMessage);
   // }
   // return;
   final data = await flutterWoocommerce.createUserToken(
-      userName: "seragSakr", password: "Srag123");
+      userName: "srag.sabry@gmail.com", password: "Srag123");
   print(data["token"].toString());
   final token = data["token"];
   final userEmail = data["user_email"];

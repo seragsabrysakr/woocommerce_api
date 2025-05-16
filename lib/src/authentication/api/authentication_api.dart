@@ -115,7 +115,7 @@ extension WooAuthenticationApi on FlutterWooCommerce {
     }
   }
 
-  Future<int?> getUserInfo(String email) async {
+  Future<WooCustomer?> getUserInfo(String email) async {
     final authToken = base64.encode(utf8.encode('$username:$password'));
     dio.options.headers = {
       HttpHeaders.authorizationHeader: 'Basic $authToken',
@@ -132,9 +132,9 @@ extension WooAuthenticationApi on FlutterWooCommerce {
         throw Exception('User not found');
       }
       final user = responseData.first;
-      final userId = (user as Map<String, dynamic>)['id'] as int;
-      await LocalStorageHelper.updateSecurityUserId(userId);
-      return userId;
+      final customer = WooCustomer.fromJson(user);
+      // await LocalStorageHelper.updateSecurityUserId(userId);
+      return customer;
     } on DioException catch (e) {
       final errorMsg = e.response?.data['message'] ?? e.message;
       throw Exception('Failed to get user info: $errorMsg');
@@ -143,7 +143,7 @@ extension WooAuthenticationApi on FlutterWooCommerce {
     }
   }
 
-  Future<int> register(WooCustomer customer) async {
+  Future<WooCustomer> register(WooCustomer customer) async {
     try {
       final response = await dio.post(
         _AuthenticationEndpoints.register,
@@ -153,9 +153,14 @@ extension WooAuthenticationApi on FlutterWooCommerce {
       if (response.statusCode != null &&
           response.statusCode! >= 200 &&
           response.statusCode! < 300) {
-        final userId = (response.data as Map<String, dynamic>)['id'] as int;
-        await LocalStorageHelper.updateSecurityUserId(userId);
-        return userId;
+        final responseData = response.data as Map<String, dynamic>;
+        if (responseData.isEmpty) {
+          throw Exception('User not found');
+        }
+        final user = responseData;
+        final customer = WooCustomer.fromJson(user);
+        // await LocalStorageHelper.updateSecurityUserId(userId);
+        return customer;
       } else {
         final errorMsg =
             (response.data as Map<String, dynamic>)['message'] as String;
