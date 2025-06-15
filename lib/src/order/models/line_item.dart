@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/src/base/models/metadata.dart';
 import 'package:woocommerce_flutter_api/src/helpers/fake_helper.dart';
 import 'package:woocommerce_flutter_api/src/order/models/tax.dart';
+import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 part 'line_item.g.dart';
 
@@ -66,6 +67,8 @@ class WooLineItem {
   /// Parent order ID.
   @JsonKey(name: 'parent_name', includeIfNull: false)
   final String? parentName;
+  @JsonKey(name: 'image', includeIfNull: false)
+  final WooProductImage? image;
 
   WooLineItem({
     this.id,
@@ -83,6 +86,7 @@ class WooLineItem {
     this.sku,
     this.price,
     this.parentName,
+    this.image,
   });
 
   factory WooLineItem.fromJson(Map<String, dynamic> json) =>

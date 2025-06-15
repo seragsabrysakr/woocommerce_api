@@ -26,6 +26,9 @@ WooLineItem _$WooLineItemFromJson(Map<String, dynamic> json) => WooLineItem(
       sku: json['sku'] as String?,
       price: (json['price'] as num?)?.toDouble(),
       parentName: json['parent_name'] as String?,
+      image: json['image'] == null
+          ? null
+          : WooProductImage.fromJson(json['image'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$WooLineItemToJson(WooLineItem instance) {
@@ -52,5 +55,6 @@ Map<String, dynamic> _$WooLineItemToJson(WooLineItem instance) {
   writeNotNull('sku', instance.sku);
   writeNotNull('price', instance.price);
   writeNotNull('parent_name', instance.parentName);
+  writeNotNull('image', instance.image);
   return val;
 }
