@@ -115,7 +115,8 @@ extension WooOrderApi on FlutterWooCommerce {
     } catch (e, t) {
       dPrint(e.toString());
       dPrint(t.toString());
-      throw Exception("Unexpected error in API call: " + e.toString());
+      throw Exception(
+          "Unexpected error in API call: " + e.toString() + t.toString());
     }
   }
 

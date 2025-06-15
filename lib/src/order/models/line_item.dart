@@ -68,7 +68,7 @@ class WooLineItem {
   @JsonKey(name: 'parent_name', includeIfNull: false)
   final String? parentName;
   @JsonKey(name: 'image', includeIfNull: false)
-  final WooProductImage? image;
+  final Map<String, dynamic>? image;
 
   WooLineItem({
     this.id,
