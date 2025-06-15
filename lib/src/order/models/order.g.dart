@@ -13,7 +13,7 @@ WooOrder _$WooOrderFromJson(Map<String, dynamic> json) => WooOrder(
       orderKey: json['order_key'] as String?,
       createdVia: json['created_via'] as String?,
       version: json['version'] as String?,
-      status: $enumDecodeNullable(_$WooOrderStatusEnumMap, json['status']),
+      status: WooOrderStatus.fromString(json['status'] as String),
       currency:
           $enumDecodeNullable(_$WooOrderCurrencyEnumMap, json['currency']),
       dateCreated: json['date_created'] == null
@@ -139,18 +139,6 @@ Map<String, dynamic> _$WooOrderToJson(WooOrder instance) {
   val['set_paid'] = instance.setPaid;
   return val;
 }
-
-const _$WooOrderStatusEnumMap = {
-  WooOrderStatus.any: 'any',
-  WooOrderStatus.pending: 'pending',
-  WooOrderStatus.processing: 'processing',
-  WooOrderStatus.onHold: 'onHold',
-  WooOrderStatus.completed: 'completed',
-  WooOrderStatus.cancelled: 'cancelled',
-  WooOrderStatus.refunded: 'refunded',
-  WooOrderStatus.failed: 'failed',
-  WooOrderStatus.trash: 'trash',
-};
 
 const _$WooOrderCurrencyEnumMap = {
   WooOrderCurrency.AED: 'AED',
@@ -314,4 +302,17 @@ const _$WooOrderCurrencyEnumMap = {
   WooOrderCurrency.YER: 'YER',
   WooOrderCurrency.ZAR: 'ZAR',
   WooOrderCurrency.ZMW: 'ZMW',
+};
+
+const _$WooOrderStatusEnumMap = {
+  WooOrderStatus.any: 'any',
+  WooOrderStatus.pending: 'pending',
+  WooOrderStatus.processing: 'processing',
+  WooOrderStatus.onHold: 'onHold',
+  WooOrderStatus.completed: 'completed',
+  WooOrderStatus.cancelled: 'cancelled',
+  WooOrderStatus.refunded: 'refunded',
+  WooOrderStatus.failed: 'failed',
+  WooOrderStatus.trash: 'trash',
+  WooOrderStatus.underReview: 'underReview',
 };

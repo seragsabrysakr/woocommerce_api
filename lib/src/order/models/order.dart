@@ -43,7 +43,8 @@ class WooOrder {
   final String? version;
 
   /// Order status. Options: pending, processing, on-hold, completed, cancelled, refunded, failed and trash. Default is pending.
-  @JsonKey(name: 'status', includeIfNull: false)
+  @JsonKey(
+      name: 'status', includeIfNull: false, fromJson: WooOrderStatus.fromString)
   final WooOrderStatus? status;
 
   /// Currency the order was created with, in ISO format. Options: AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN, BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB, BRL, BSD, BTC, BTN, BWP, BYR, BZD, CAD, CDF, CHF, CLP, CNY, COP, CRC, CUC, CUP, CVE, CZK, DJF, DKK, DOP, DZD, EGP, ERN, ETB, EUR, FJD, FKP,
