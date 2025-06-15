@@ -70,31 +70,31 @@ class WooOrder {
 
   /// Total discount amount for the order.
   @JsonKey(name: 'discount_total')
-  final double? discountTotal;
+  final String? discountTotal;
 
   /// Total discount tax amount for the order.
   @JsonKey(name: 'discount_tax')
-  final double? discountTax;
+  final String? discountTax;
 
   /// Total shipping amount for the order.
   @JsonKey(name: 'shipping_total')
-  final double? shippingTotal;
+  final String? shippingTotal;
 
   /// Total shipping tax amount for the order.
   @JsonKey(name: 'shipping_tax')
-  final double? shippingTax;
+  final String? shippingTax;
 
   /// Sum of line item taxes only.
   @JsonKey(name: 'cart_tax')
-  final double? cartTax;
+  final String? cartTax;
 
   /// Grand total.
   @JsonKey(name: 'total')
-  final double? total;
+  final String? total;
 
   /// Sum of all taxes.
   @JsonKey(name: 'total_tax')
-  final double? totalTax;
+  final String? totalTax;
 
   /// True the prices included tax during checkout.
   @JsonKey(name: 'prices_include_tax')
@@ -254,13 +254,6 @@ class WooOrder {
         dateCreatedGmt: FakeHelper.datetime(),
         dateModified: FakeHelper.datetime(),
         dateModifiedGmt: FakeHelper.datetime(),
-        discountTotal: FakeHelper.decimal(),
-        discountTax: FakeHelper.decimal(),
-        shippingTotal: FakeHelper.decimal(),
-        shippingTax: FakeHelper.decimal(),
-        cartTax: FakeHelper.decimal(),
-        total: FakeHelper.decimal(),
-        totalTax: FakeHelper.decimal(),
         pricesIncludeTax: FakeHelper.boolean(),
         customerId: FakeHelper.integer(),
         customerIpAddress: Faker().internet.ipv4Address(),

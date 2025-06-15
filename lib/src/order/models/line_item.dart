@@ -108,3 +108,18 @@ class WooLineItem {
         parentName: FakeHelper.word(),
       );
 }
+
+class StringOrNumToDoubleConverter implements JsonConverter<double?, dynamic> {
+  const StringOrNumToDoubleConverter();
+
+  @override
+  double? fromJson(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.toDouble();
+    if (value is String) return double.tryParse(value);
+    return null;
+  }
+
+  @override
+  dynamic toJson(double? value) => value;
+}
