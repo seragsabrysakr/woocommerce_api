@@ -19,37 +19,37 @@ part 'order.g.dart';
 @JsonSerializable()
 class WooOrder {
   /// Unique identifier for the resource.
-  @JsonKey(name: 'id')
+  @JsonKey(name: 'id', includeIfNull: false)
   final int? id;
 
   /// Parent order ID.
-  @JsonKey(name: 'parent_id')
+  @JsonKey(name: 'parent_id', includeIfNull: false)
   final int? parentId;
 
   /// Order number.
-  @JsonKey(name: 'number')
+  @JsonKey(name: 'number', includeIfNull: false)
   final String? number;
 
   /// Order key.
-  @JsonKey(name: 'order_key')
+  @JsonKey(name: 'order_key', includeIfNull: false)
   final String? orderKey;
 
   /// Shows where the order was created. Example: rest-api
-  @JsonKey(name: 'created_via')
+  @JsonKey(name: 'created_via', includeIfNull: false)
   final String? createdVia;
 
   /// Version of WooCommerce which last updated the order.
-  @JsonKey(name: 'version')
+  @JsonKey(name: 'version', includeIfNull: false)
   final String? version;
 
   /// Order status. Options: pending, processing, on-hold, completed, cancelled, refunded, failed and trash. Default is pending.
-  @JsonKey(name: 'status')
+  @JsonKey(name: 'status', includeIfNull: false)
   final WooOrderStatus? status;
 
   /// Currency the order was created with, in ISO format. Options: AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN, BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB, BRL, BSD, BTC, BTN, BWP, BYR, BZD, CAD, CDF, CHF, CLP, CNY, COP, CRC, CUC, CUP, CVE, CZK, DJF, DKK, DOP, DZD, EGP, ERN, ETB, EUR, FJD, FKP,
   /// GBP, GEL, GGP, GHS, GIP, GMD, GNF, GTQ, GYD, HKD, HNL, HRK, HTG, HUF, IDR, ILS, IMP, INR, IQD, IRR, IRT, ISK, JEP, JMD, JOD, JPY, KES, KGS, KHR, KMF, KPW, KRW, KWD, KYD, KZT, LAK, LBP, LKR, LRD, LSL, LYD, MAD, MDL, MGA, MKD, MMK, MNT, MOP, MRO, MUR, MVR, MWK, MXN, MYR, MZN, NAD, NGN, NIO, NOK, NPR, NZD, OMR, PAB, PEN, PGK, PHP, PKR, PLN,
   /// PRB, PYG, QAR, RON, RSD, RUB, RWF, SAR, SBD, SCR, SDG, SEK, SGD, SHP, SLL, SOS, SRD, SSP, STD, SYP, SZL, THB, TJS, TMT, TND, TOP, TRY, TTD, TWD, TZS, UAH, UGX, USD, UYU, UZS, VEF, VND, VUV, WST, XAF, XCD, XOF, XPF, YER, ZAR and ZMW. Default is USD.
-  @JsonKey(name: 'currency')
+  @JsonKey(name: 'currency', includeIfNull: false)
   final WooOrderCurrency? currency;
 
   /// The date the order was created, in the site's timezone.
@@ -133,7 +133,7 @@ class WooOrder {
   final String? paymentMethodTitle;
 
   /// Unique transaction ID.
-  @JsonKey(name: 'transaction_id')
+  @JsonKey(name: 'transaction_id', includeIfNull: false)
   final String? transactionId;
 
   /// The date the order was paid, in the site's timezone.

@@ -28,21 +28,29 @@ WooLineItem _$WooLineItemFromJson(Map<String, dynamic> json) => WooLineItem(
       parentName: json['parent_name'] as String?,
     );
 
-Map<String, dynamic> _$WooLineItemToJson(WooLineItem instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'product_id': instance.productId,
-      'variation_id': instance.variationId,
-      'quantity': instance.quantity,
-      'tax_class': instance.taxClass,
-      'subtotal': instance.subtotal,
-      'subtotal_tax': instance.subtotalTax,
-      'total': instance.total,
-      'total_tax': instance.totalTax,
-      'taxes': instance.taxes,
-      'meta_data': instance.metaData,
-      'sku': instance.sku,
-      'price': instance.price,
-      'parent_name': instance.parentName,
-    };
+Map<String, dynamic> _$WooLineItemToJson(WooLineItem instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('name', instance.name);
+  writeNotNull('product_id', instance.productId);
+  writeNotNull('variation_id', instance.variationId);
+  writeNotNull('quantity', instance.quantity);
+  writeNotNull('tax_class', instance.taxClass);
+  writeNotNull('subtotal', instance.subtotal);
+  writeNotNull('subtotal_tax', instance.subtotalTax);
+  writeNotNull('total', instance.total);
+  writeNotNull('total_tax', instance.totalTax);
+  writeNotNull('taxes', instance.taxes);
+  writeNotNull('meta_data', instance.metaData);
+  writeNotNull('sku', instance.sku);
+  writeNotNull('price', instance.price);
+  writeNotNull('parent_name', instance.parentName);
+  return val;
+}
