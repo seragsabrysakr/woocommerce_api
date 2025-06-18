@@ -8,6 +8,7 @@ abstract class _AuthenticationEndpoints {
 
   static String get register => '/customers';
   static String get getUserInfo => '/customers';
+  static String get customers => '/customers';
 
   static String get changePassword => '/change-password';
 

@@ -1,3 +1,4 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 
 class WooShipping {
@@ -28,16 +29,21 @@ class WooShipping {
   /// Country code in ISO 3166-1 alpha-2 format.
   String? country;
 
-  WooShipping(
-      {this.firstName,
-      this.lastName,
-      this.company,
-      this.address1,
-      this.address2,
-      this.city,
-      this.state,
-      this.postcode,
-      this.country});
+  /// Phone number.
+  String? phone;
+
+  WooShipping({
+    this.firstName,
+    this.lastName,
+    this.company,
+    this.address1,
+    this.address2,
+    this.city,
+    this.state,
+    this.postcode,
+    this.phone,
+    this.country,
+  });
 
   WooShipping.fromJson(Map<String, dynamic> json) {
     firstName = json['first_name'];
@@ -49,6 +55,7 @@ class WooShipping {
     state = json['state'];
     postcode = json['postcode'];
     country = json['country'];
+    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -62,6 +69,7 @@ class WooShipping {
     data['state'] = state;
     data['postcode'] = postcode;
     data['country'] = country;
+    if (phone != null) data['phone'] = phone;
     return data;
   }
 

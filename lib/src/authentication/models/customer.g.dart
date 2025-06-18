@@ -39,22 +39,31 @@ WooCustomer _$WooCustomerFromJson(Map<String, dynamic> json) => WooCustomer(
       isPayingCustomer: json['is_paying_customer'] as bool?,
     );
 
-Map<String, dynamic> _$WooCustomerToJson(WooCustomer instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'date_created': instance.dateCreated?.toIso8601String(),
-      'date_created_gmt': instance.dateCreatedGmt?.toIso8601String(),
-      'date_modified': instance.dateModified?.toIso8601String(),
-      'date_modified_gmt': instance.dateModifiedGmt?.toIso8601String(),
-      'email': instance.email,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-      'role': instance.role,
-      'username': instance.username,
-      'password': instance.password,
-      'billing': instance.billing,
-      'shipping': instance.shipping,
-      'avatar_url': instance.avatarUrl,
-      'meta_data': instance.metaData,
-      'is_paying_customer': instance.isPayingCustomer,
-    };
+Map<String, dynamic> _$WooCustomerToJson(WooCustomer instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'date_created': instance.dateCreated?.toIso8601String(),
+    'date_created_gmt': instance.dateCreatedGmt?.toIso8601String(),
+    'date_modified': instance.dateModified?.toIso8601String(),
+    'date_modified_gmt': instance.dateModifiedGmt?.toIso8601String(),
+    'email': instance.email,
+    'first_name': instance.firstName,
+    'last_name': instance.lastName,
+    'role': instance.role,
+    'username': instance.username,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('password', instance.password);
+  val['billing'] = instance.billing;
+  val['shipping'] = instance.shipping;
+  val['avatar_url'] = instance.avatarUrl;
+  val['meta_data'] = instance.metaData;
+  val['is_paying_customer'] = instance.isPayingCustomer;
+  return val;
+}

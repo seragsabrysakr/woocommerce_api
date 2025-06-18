@@ -46,7 +46,7 @@ class WooCustomer {
   String? username;
 
   /// Customer password.
-  @JsonKey(name: 'password')
+  @JsonKey(name: 'password', includeIfNull: false)
   String? password;
 
   /// List of billing address data.

@@ -143,6 +143,66 @@ extension WooAuthenticationApi on FlutterWooCommerce {
     }
   }
 
+  Future<WooCustomer?> updateCustomer(WooCustomer user) async {
+    final authToken = base64.encode(utf8.encode('$username:$password'));
+    dio.options.headers = {
+      HttpHeaders.authorizationHeader: 'Basic $authToken',
+    };
+    dio.options.baseUrl = FlutterWooCommerce.url;
+    final userId = user.id;
+    final userData = {
+      "email": user.email,
+      "first_name": user.firstName,
+      "last_name": user.lastName,
+      "username": user.username,
+      if (user.password != null) "password": user.password,
+      "billing": {
+        "first_name": user.billing?.firstName,
+        "last_name": user.billing?.firstName,
+        "company": user.billing?.company,
+        "address_1": user.billing?.address1,
+        "address_2": user.billing?.address2,
+        "city": user.billing?.city,
+        "state": user.billing?.state,
+        "postcode": user.billing?.postcode,
+        "country": user.billing?.country,
+        "email": user.billing?.email,
+        "phone": user.billing?.phone
+      },
+      "shipping": {
+        "first_name": user.shipping?.firstName,
+        "last_name": user.shipping?.lastName,
+        "company": user.shipping?.company,
+        "address_1": user.shipping?.address1,
+        "address_2": user.shipping?.address2,
+        "city": user.shipping?.city,
+        "state": user.shipping?.state,
+        "postcode": user.shipping?.postcode,
+        "country": user.shipping?.country,
+        if (user.shipping?.phone != null) "phone": user.shipping?.phone
+      },
+    };
+    try {
+      final response = await dio.post(
+        _AuthenticationEndpoints.customers + "/" + "${userId}",
+        data: userData,
+      );
+      final responseData = response.data;
+      if (responseData.isEmpty) {
+        throw Exception('User not found');
+      }
+      final user = responseData;
+      final customer = WooCustomer.fromJson(user);
+      // await LocalStorageHelper.updateSecurityUserId(userId);
+      return customer;
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data['message'] ?? e.message;
+      throw Exception('Failed to get user info: $errorMsg');
+    } catch (e) {
+      throw Exception('Unexpected error getting user info: ${e.toString()}');
+    }
+  }
+
   Future<WooCustomer> register(WooCustomer customer) async {
     try {
       final response = await dio.post(
