@@ -13,7 +13,7 @@ WooOrder _$WooOrderFromJson(Map<String, dynamic> json) => WooOrder(
       orderKey: json['order_key'] as String?,
       createdVia: json['created_via'] as String?,
       version: json['version'] as String?,
-      status: $enumDecodeNullable(_$WooOrderStatusEnumMap, json['status']),
+      status: WooOrderStatus.fromString(json['status'] as String),
       currency:
           $enumDecodeNullable(_$WooOrderCurrencyEnumMap, json['currency']),
       dateCreated: json['date_created'] == null
@@ -28,13 +28,13 @@ WooOrder _$WooOrderFromJson(Map<String, dynamic> json) => WooOrder(
       dateModifiedGmt: json['date_modified_gmt'] == null
           ? null
           : DateTime.parse(json['date_modified_gmt'] as String),
-      discountTotal: (json['discount_total'] as num?)?.toDouble(),
-      discountTax: (json['discount_tax'] as num?)?.toDouble(),
-      shippingTotal: (json['shipping_total'] as num?)?.toDouble(),
-      shippingTax: (json['shipping_tax'] as num?)?.toDouble(),
-      cartTax: (json['cart_tax'] as num?)?.toDouble(),
-      total: (json['total'] as num?)?.toDouble(),
-      totalTax: (json['total_tax'] as num?)?.toDouble(),
+      discountTotal: json['discount_total'] as String?,
+      discountTax: json['discount_tax'] as String?,
+      shippingTotal: json['shipping_total'] as String?,
+      shippingTax: json['shipping_tax'] as String?,
+      cartTax: json['cart_tax'] as String?,
+      total: json['total'] as String?,
+      totalTax: json['total_tax'] as String?,
       pricesIncludeTax: json['prices_include_tax'] as bool?,
       customerId: (json['customer_id'] as num?)?.toInt(),
       customerIpAddress: json['customer_ip_address'] as String?,
@@ -86,62 +86,59 @@ WooOrder _$WooOrderFromJson(Map<String, dynamic> json) => WooOrder(
       setPaid: json['set_paid'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$WooOrderToJson(WooOrder instance) => <String, dynamic>{
-      'id': instance.id,
-      'parent_id': instance.parentId,
-      'number': instance.number,
-      'order_key': instance.orderKey,
-      'created_via': instance.createdVia,
-      'version': instance.version,
-      'status': _$WooOrderStatusEnumMap[instance.status],
-      'currency': _$WooOrderCurrencyEnumMap[instance.currency],
-      'date_created': instance.dateCreated?.toIso8601String(),
-      'date_created_gmt': instance.dateCreatedGmt?.toIso8601String(),
-      'date_modified': instance.dateModified?.toIso8601String(),
-      'date_modified_gmt': instance.dateModifiedGmt?.toIso8601String(),
-      'discount_total': instance.discountTotal,
-      'discount_tax': instance.discountTax,
-      'shipping_total': instance.shippingTotal,
-      'shipping_tax': instance.shippingTax,
-      'cart_tax': instance.cartTax,
-      'total': instance.total,
-      'total_tax': instance.totalTax,
-      'prices_include_tax': instance.pricesIncludeTax,
-      'customer_id': instance.customerId,
-      'customer_ip_address': instance.customerIpAddress,
-      'customer_user_agent': instance.customerUserAgent,
-      'customer_note': instance.customerNote,
-      'billing': instance.billing,
-      'shipping': instance.shipping,
-      'payment_method': instance.paymentMethod,
-      'payment_method_title': instance.paymentMethodTitle,
-      'transaction_id': instance.transactionId,
-      'date_paid': instance.datePaid?.toIso8601String(),
-      'date_paid_gmt': instance.datePaidGmt?.toIso8601String(),
-      'date_completed': instance.dateCompleted?.toIso8601String(),
-      'date_completed_gmt': instance.dateCompletedGmt?.toIso8601String(),
-      'cart_hash': instance.cartHash,
-      'meta_data': instance.metaData,
-      'line_items': instance.lineItems,
-      'tax_lines': instance.taxLines,
-      'shipping_lines': instance.shippingLines,
-      'fee_lines': instance.feeLines,
-      'coupon_lines': instance.couponLines,
-      'refunds': instance.refunds,
-      'set_paid': instance.setPaid,
-    };
+Map<String, dynamic> _$WooOrderToJson(WooOrder instance) {
+  final val = <String, dynamic>{};
 
-const _$WooOrderStatusEnumMap = {
-  WooOrderStatus.any: 'any',
-  WooOrderStatus.pending: 'pending',
-  WooOrderStatus.processing: 'processing',
-  WooOrderStatus.onHold: 'onHold',
-  WooOrderStatus.completed: 'completed',
-  WooOrderStatus.cancelled: 'cancelled',
-  WooOrderStatus.refunded: 'refunded',
-  WooOrderStatus.failed: 'failed',
-  WooOrderStatus.trash: 'trash',
-};
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('parent_id', instance.parentId);
+  writeNotNull('number', instance.number);
+  writeNotNull('order_key', instance.orderKey);
+  writeNotNull('created_via', instance.createdVia);
+  writeNotNull('version', instance.version);
+  writeNotNull('status', _$WooOrderStatusEnumMap[instance.status]);
+  writeNotNull('currency', _$WooOrderCurrencyEnumMap[instance.currency]);
+  val['date_created'] = instance.dateCreated?.toIso8601String();
+  val['date_created_gmt'] = instance.dateCreatedGmt?.toIso8601String();
+  val['date_modified'] = instance.dateModified?.toIso8601String();
+  val['date_modified_gmt'] = instance.dateModifiedGmt?.toIso8601String();
+  val['discount_total'] = instance.discountTotal;
+  val['discount_tax'] = instance.discountTax;
+  val['shipping_total'] = instance.shippingTotal;
+  val['shipping_tax'] = instance.shippingTax;
+  val['cart_tax'] = instance.cartTax;
+  val['total'] = instance.total;
+  val['total_tax'] = instance.totalTax;
+  val['prices_include_tax'] = instance.pricesIncludeTax;
+  val['customer_id'] = instance.customerId;
+  val['customer_ip_address'] = instance.customerIpAddress;
+  val['customer_user_agent'] = instance.customerUserAgent;
+  val['customer_note'] = instance.customerNote;
+  val['billing'] = instance.billing;
+  val['shipping'] = instance.shipping;
+  val['payment_method'] = instance.paymentMethod;
+  val['payment_method_title'] = instance.paymentMethodTitle;
+  writeNotNull('transaction_id', instance.transactionId);
+  val['date_paid'] = instance.datePaid?.toIso8601String();
+  val['date_paid_gmt'] = instance.datePaidGmt?.toIso8601String();
+  val['date_completed'] = instance.dateCompleted?.toIso8601String();
+  val['date_completed_gmt'] = instance.dateCompletedGmt?.toIso8601String();
+  val['cart_hash'] = instance.cartHash;
+  val['meta_data'] = instance.metaData;
+  val['line_items'] = instance.lineItems;
+  val['tax_lines'] = instance.taxLines;
+  val['shipping_lines'] = instance.shippingLines;
+  val['fee_lines'] = instance.feeLines;
+  val['coupon_lines'] = instance.couponLines;
+  val['refunds'] = instance.refunds;
+  val['set_paid'] = instance.setPaid;
+  return val;
+}
 
 const _$WooOrderCurrencyEnumMap = {
   WooOrderCurrency.AED: 'AED',
@@ -305,4 +302,17 @@ const _$WooOrderCurrencyEnumMap = {
   WooOrderCurrency.YER: 'YER',
   WooOrderCurrency.ZAR: 'ZAR',
   WooOrderCurrency.ZMW: 'ZMW',
+};
+
+const _$WooOrderStatusEnumMap = {
+  WooOrderStatus.any: 'any',
+  WooOrderStatus.pending: 'pending',
+  WooOrderStatus.processing: 'processing',
+  WooOrderStatus.onHold: 'onHold',
+  WooOrderStatus.completed: 'completed',
+  WooOrderStatus.cancelled: 'cancelled',
+  WooOrderStatus.refunded: 'refunded',
+  WooOrderStatus.failed: 'failed',
+  WooOrderStatus.trash: 'trash',
+  WooOrderStatus.underReview: 'underReview',
 };

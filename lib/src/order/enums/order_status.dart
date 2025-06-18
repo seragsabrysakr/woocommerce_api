@@ -9,13 +9,18 @@ enum WooOrderStatus {
   cancelled,
   refunded,
   failed,
-  trash;
+  trash,
+  underReview;
 
   static WooOrderStatus fake() {
     return values[Faker().randomGenerator.integer(values.length - 1)];
   }
 
   static WooOrderStatus fromString(String type) {
+    if (type == 'under-review') {
+      return WooOrderStatus.underReview;
+    }
+
     if (type == 'pending') {
       return WooOrderStatus.pending;
     }
