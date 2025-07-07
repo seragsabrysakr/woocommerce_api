@@ -274,7 +274,7 @@ extension WooOrderApi on FlutterWooCommerce {
 
     try {
       final response = await dio.put(
-        _OrderEndpoints.orders,
+        _OrderEndpoints.singleOrder(order.id!),
         data: order.toJson(),
       );
       if (response.statusCode != null &&
