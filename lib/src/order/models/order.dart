@@ -20,174 +20,174 @@ part 'order.g.dart';
 class WooOrder {
   /// Unique identifier for the resource.
   @JsonKey(name: 'id', includeIfNull: false)
-  final int? id;
+   int? id;
 
   /// Parent order ID.
   @JsonKey(name: 'parent_id', includeIfNull: false)
-  final int? parentId;
+   int? parentId;
 
   /// Order number.
   @JsonKey(name: 'number', includeIfNull: false)
-  final String? number;
+   String? number;
 
   /// Order key.
   @JsonKey(name: 'order_key', includeIfNull: false)
-  final String? orderKey;
+   String? orderKey;
 
   /// Shows where the order was created. Example: rest-api
   @JsonKey(name: 'created_via', includeIfNull: false)
-  final String? createdVia;
+   String? createdVia;
 
   /// Version of WooCommerce which last updated the order.
   @JsonKey(name: 'version', includeIfNull: false)
-  final String? version;
+   String? version;
 
   /// Order status. Options: pending, processing, on-hold, completed, cancelled, refunded, failed and trash. Default is pending.
   @JsonKey(
       name: 'status', includeIfNull: false, fromJson: WooOrderStatus.fromString)
-  final WooOrderStatus? status;
+    WooOrderStatus? status;
 
   /// Currency the order was created with, in ISO format. Options: AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN, BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB, BRL, BSD, BTC, BTN, BWP, BYR, BZD, CAD, CDF, CHF, CLP, CNY, COP, CRC, CUC, CUP, CVE, CZK, DJF, DKK, DOP, DZD, EGP, ERN, ETB, EUR, FJD, FKP,
   /// GBP, GEL, GGP, GHS, GIP, GMD, GNF, GTQ, GYD, HKD, HNL, HRK, HTG, HUF, IDR, ILS, IMP, INR, IQD, IRR, IRT, ISK, JEP, JMD, JOD, JPY, KES, KGS, KHR, KMF, KPW, KRW, KWD, KYD, KZT, LAK, LBP, LKR, LRD, LSL, LYD, MAD, MDL, MGA, MKD, MMK, MNT, MOP, MRO, MUR, MVR, MWK, MXN, MYR, MZN, NAD, NGN, NIO, NOK, NPR, NZD, OMR, PAB, PEN, PGK, PHP, PKR, PLN,
   /// PRB, PYG, QAR, RON, RSD, RUB, RWF, SAR, SBD, SCR, SDG, SEK, SGD, SHP, SLL, SOS, SRD, SSP, STD, SYP, SZL, THB, TJS, TMT, TND, TOP, TRY, TTD, TWD, TZS, UAH, UGX, USD, UYU, UZS, VEF, VND, VUV, WST, XAF, XCD, XOF, XPF, YER, ZAR and ZMW. Default is USD.
   @JsonKey(name: 'currency', includeIfNull: false)
-  final WooOrderCurrency? currency;
+   WooOrderCurrency? currency;
 
   /// The date the order was created, in the site's timezone.
   @JsonKey(name: 'date_created')
-  final DateTime? dateCreated;
+   DateTime? dateCreated;
 
   /// The date the order was created, as GMT.
   @JsonKey(name: 'date_created_gmt')
-  final DateTime? dateCreatedGmt;
+   DateTime? dateCreatedGmt;
 
   /// The date the order was last modified, in the site's timezone.
   @JsonKey(name: 'date_modified')
-  final DateTime? dateModified;
+   DateTime? dateModified;
 
   /// The date the order was last modified, as GMT.
   @JsonKey(name: 'date_modified_gmt')
-  final DateTime? dateModifiedGmt;
+   DateTime? dateModifiedGmt;
 
   /// Total discount amount for the order.
   @JsonKey(name: 'discount_total')
-  final String? discountTotal;
+   String? discountTotal;
 
   /// Total discount tax amount for the order.
   @JsonKey(name: 'discount_tax')
-  final String? discountTax;
+   String? discountTax;
 
   /// Total shipping amount for the order.
   @JsonKey(name: 'shipping_total')
-  final String? shippingTotal;
+   String? shippingTotal;
 
   /// Total shipping tax amount for the order.
   @JsonKey(name: 'shipping_tax')
-  final String? shippingTax;
+   String? shippingTax;
 
   /// Sum of line item taxes only.
   @JsonKey(name: 'cart_tax')
-  final String? cartTax;
+   String? cartTax;
 
   /// Grand total.
   @JsonKey(name: 'total')
-  final String? total;
+   String? total;
 
   /// Sum of all taxes.
   @JsonKey(name: 'total_tax')
-  final String? totalTax;
+   String? totalTax;
 
   /// True the prices included tax during checkout.
   @JsonKey(name: 'prices_include_tax')
-  final bool? pricesIncludeTax;
+   bool? pricesIncludeTax;
 
   /// User ID who owns the order. 0 for guests. Default is 0.
   @JsonKey(name: 'customer_id')
-  final int? customerId;
+   int? customerId;
 
   /// Customer's IP address.
   @JsonKey(name: 'customer_ip_address')
-  final String? customerIpAddress;
+   String? customerIpAddress;
 
   /// User agent of the customer.
   @JsonKey(name: 'customer_user_agent')
-  final String? customerUserAgent;
+   String? customerUserAgent;
 
   /// Note left by customer during checkout.
   @JsonKey(name: 'customer_note')
-  final String? customerNote;
+   String? customerNote;
 
   /// Billing address.
   @JsonKey(name: 'billing')
-  final WooBilling? billing;
+   WooBilling? billing;
 
   /// Shipping address.
   @JsonKey(name: 'shipping')
-  final WooShipping? shipping;
+   WooShipping? shipping;
 
   /// Payment method ID.
   @JsonKey(name: 'payment_method')
-  final String? paymentMethod;
+   String? paymentMethod;
 
   /// Payment method title.
   @JsonKey(name: 'payment_method_title')
-  final String? paymentMethodTitle;
+   String? paymentMethodTitle;
 
   /// Unique transaction ID.
   @JsonKey(name: 'transaction_id', includeIfNull: false)
-  final String? transactionId;
+   String? transactionId;
 
   /// The date the order was paid, in the site's timezone.
   @JsonKey(name: 'date_paid')
-  final DateTime? datePaid;
+   DateTime? datePaid;
 
   /// The date the order was paid, as GMT.
   @JsonKey(name: 'date_paid_gmt')
-  final DateTime? datePaidGmt;
+   DateTime? datePaidGmt;
 
   /// The date the order was completed, in the site's timezone.
   @JsonKey(name: 'date_completed')
-  final DateTime? dateCompleted;
+   DateTime? dateCompleted;
 
   /// The date the order was completed, as GMT.
   @JsonKey(name: 'date_completed_gmt')
-  final DateTime? dateCompletedGmt;
+   DateTime? dateCompletedGmt;
 
   /// MD5 hash of cart items to ensure orders are not modified.
   @JsonKey(name: 'cart_hash')
-  final String? cartHash;
+   String? cartHash;
 
   /// Meta data.
   @JsonKey(name: 'meta_data')
-  final List<WooMetaData>? metaData;
+   List<WooMetaData>? metaData;
 
   /// Line items data.
   @JsonKey(name: 'line_items')
-  final List<WooLineItem>? lineItems;
+   List<WooLineItem>? lineItems;
 
   /// Tax lines data.
   @JsonKey(name: 'tax_lines')
-  final List<WooTaxLine>? taxLines;
+   List<WooTaxLine>? taxLines;
 
   /// Shipping lines data.
   @JsonKey(name: 'shipping_lines')
-  final List<WooShippingLine>? shippingLines;
+   List<WooShippingLine>? shippingLines;
 
   /// Fee lines data.
   @JsonKey(name: 'fee_lines')
-  final List<WooOrderFeeLine>? feeLines;
+   List<WooOrderFeeLine>? feeLines;
 
   /// Coupons line data.
   @JsonKey(name: 'coupon_lines')
-  final List<WooOrderCouponLine>? couponLines;
+   List<WooOrderCouponLine>? couponLines;
 
   /// List of refunds
   @JsonKey(name: 'refunds')
-  final List<WooRefund>? refunds;
+   List<WooRefund>? refunds;
 
   /// Define if the order is paid. It will set the status to processing and reduce stock items. Default is false.
   @JsonKey(name: 'set_paid')
-  final bool? setPaid;
+   bool? setPaid;
 
   WooOrder({
     this.id,
