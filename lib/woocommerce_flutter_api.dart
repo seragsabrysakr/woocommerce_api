@@ -1,5 +1,8 @@
 library;
 
+// attributes
+export 'src/attribute/api/attribute_api.dart';
+export 'src/attribute/models/models.dart';
 // authentication
 export 'src/authentication/api/authentication_api.dart';
 export 'src/authentication/models/models.dart';
