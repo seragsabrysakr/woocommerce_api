@@ -22,6 +22,7 @@ class FlutterWooCommerce {
   final bool isDebug;
   final bool useFaker;
   final String? lang;
+  final int timeout;
 
   FlutterWooCommerce({
     required this.baseUrl,
@@ -31,6 +32,7 @@ class FlutterWooCommerce {
     this.isDebug = true,
     this.useFaker = false,
     this.lang,
+    this.timeout = 60,
   }) {
     // Assign static values
     consumerKey = username;
@@ -40,6 +42,7 @@ class FlutterWooCommerce {
     url = '$baseUrl$apiPath';
     dio = Dio(
       BaseOptions(
+        connectTimeout: Duration(seconds: timeout),
         validateStatus: (status) => status != null && status < 500,
         baseUrl: '$baseUrl$apiPath',
         headers: {
@@ -56,6 +59,9 @@ class FlutterWooCommerce {
         requestHeader: true,
         requestBody: true,
         responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
       ));
     }
   }
