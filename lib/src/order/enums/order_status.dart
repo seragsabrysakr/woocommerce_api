@@ -55,4 +55,31 @@ enum WooOrderStatus {
 
     return WooOrderStatus.pending;
   }
+
+  /// Convert enum to WooCommerce string
+  static String toValue(WooOrderStatus? s) {
+    if (s == null) return "any";
+    switch (s) {
+      case WooOrderStatus.any:
+        return 'any';
+      case WooOrderStatus.pending:
+        return 'pending';
+      case WooOrderStatus.processing:
+        return 'processing';
+      case WooOrderStatus.onHold:
+        return 'on-hold';
+      case WooOrderStatus.completed:
+        return 'completed';
+      case WooOrderStatus.cancelled:
+        return 'cancelled';
+      case WooOrderStatus.refunded:
+        return 'refunded';
+      case WooOrderStatus.failed:
+        return 'failed';
+      case WooOrderStatus.trash:
+        return 'trash';
+      case WooOrderStatus.underReview:
+        return 'under-review';
+    }
+  }
 }
