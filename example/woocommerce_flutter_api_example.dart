@@ -36,10 +36,16 @@ void main() async {
   //   print(userId.toString());
   // }
   // final products = await flutterWoocommerce.getProducts(orderBy: WooSortOrderBy.id);
-  var user = await flutterWoocommerce.getUserInfo("srag.sabry@gmail.com");
-  await Future.delayed(Duration(seconds: 1));
-  user?.firstName = "Serag ";
+  // var user = await flutterWoocommerce.getUserInfo("srag.sabry@gmail.com");
+  // await Future.delayed(Duration(seconds: 1));
+  // user?.firstName = "Serag ";
   // user?.password = "Srag123";
 
-  var newUser = await flutterWoocommerce.updateCustomer(user!);
+  // var newUser = await flutterWoocommerce.updateCustomer(user!);
+  var order = await flutterWoocommerce.getOrder(id: 425731);
+
+  dPrint(order.status?.name.toString() ?? '');
+
+  order.status = WooOrderStatus.underReview;
+  await flutterWoocommerce.updateOrder(order: order);
 }

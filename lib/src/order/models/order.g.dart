@@ -101,7 +101,7 @@ Map<String, dynamic> _$WooOrderToJson(WooOrder instance) {
   writeNotNull('order_key', instance.orderKey);
   writeNotNull('created_via', instance.createdVia);
   writeNotNull('version', instance.version);
-  writeNotNull('status', _$WooOrderStatusEnumMap[instance.status]);
+  val['status'] = WooOrderStatus.toValue(instance.status);
   writeNotNull('currency', _$WooOrderCurrencyEnumMap[instance.currency]);
   val['date_created'] = instance.dateCreated?.toIso8601String();
   val['date_created_gmt'] = instance.dateCreatedGmt?.toIso8601String();
@@ -302,17 +302,4 @@ const _$WooOrderCurrencyEnumMap = {
   WooOrderCurrency.YER: 'YER',
   WooOrderCurrency.ZAR: 'ZAR',
   WooOrderCurrency.ZMW: 'ZMW',
-};
-
-const _$WooOrderStatusEnumMap = {
-  WooOrderStatus.any: 'any',
-  WooOrderStatus.pending: 'pending',
-  WooOrderStatus.processing: 'processing',
-  WooOrderStatus.onHold: 'onHold',
-  WooOrderStatus.completed: 'completed',
-  WooOrderStatus.cancelled: 'cancelled',
-  WooOrderStatus.refunded: 'refunded',
-  WooOrderStatus.failed: 'failed',
-  WooOrderStatus.trash: 'trash',
-  WooOrderStatus.underReview: 'underReview',
 };
