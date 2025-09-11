@@ -7,69 +7,6 @@ import 'package:woocommerce_flutter_api/woocommerce_flutter_api.dart';
 part 'endpoints.dart';
 
 extension WooProductApi on FlutterWooCommerce {
-  /// [context] Scope under which the request is made; determines fields present in response. Options: view and edit. Default is view.
-  ///
-  /// [page] Current page of the collection. Default is 1.
-  ///
-  /// [perPage] Maximum number of items to be returned in result set. Default is 10.
-  ///
-  /// [search] Limit results to those matching a string.
-  ///
-  /// [after] Limit response to resources published after a given ISO8601 compliant date.
-  ///
-  /// [before] Limit response to resources published before a given ISO8601 compliant date.
-  ///
-  /// [modifiedAfter] Limit response to resources modified after a given ISO8601 compliant date.
-  ///
-  /// [modifiedBefore] Limit response to resources modified after a given ISO8601 compliant date.
-  ///
-  /// [datesAreGmt] Whether to consider GMT post dates when limiting response by published or modified date.
-  ///
-  /// [exclude] Ensure result set excludes specific IDs.
-  ///
-  /// [include] Limit result set to specific ids.
-  ///
-  /// [offset] Offset the result set by a specific number of items.
-  ///
-  /// [order] Order sort attribute ascending or descending. Options: asc and desc. Default is desc.
-  ///
-  /// [orderBy] Sort collection by object attribute. Options: date, id, include, title, slug, price, popularity and rating. Default is date.
-  ///
-  /// [parent] Limit result set to those of particular parent IDs.
-  ///
-  /// [parentExclude] Limit result set to all items except those of a particular parent ID.
-  ///
-  /// [slug] Limit result set to products with a specific slug.
-  ///
-  /// [status] Limit result set to products assigned a specific status. Options: any, draft, pending, private and publish. Default is any.
-  ///
-  /// [type] Limit result set to products assigned a specific type. Options: simple, grouped, external and variable.
-  ///
-  /// [sku] Limit result set to products with a specific SKU.
-  ///
-  /// [featured] Limit result set to featured products.
-  ///
-  /// [category] Limit result set to products assigned a specific category ID.
-  ///
-  /// [tag] Limit result set to products assigned a specific tag ID.
-  ///
-  /// [shippingClass] Limit result set to products assigned a specific shipping class ID.
-  ///
-  /// [attribute] Limit result set to products with a specific attribute.
-  ///
-  /// [attributeTerm] Limit result set to products with a specific attribute term ID (required an assigned attribute).
-  ///
-  /// [taxClass] Limit result set to products with a specific tax class. Default options: standard, reduced-rate and zero-rate.
-  ///
-  /// [onSale] Limit result set to products on sale.
-  ///
-  /// [minPrice] Limit result set to products based on a minimum price.
-  ///
-  /// [maxPrice] Limit result set to products based on a maximum price.
-  ///
-  /// [stockStatus] Limit result set to products with specified stock status. Options: instock, outofstock and onbackorder.
-  ///
-  /// [useFaker], fakes the api request
   Future<List<WooProduct>> getProducts({
     WooContext context = WooContext.view,
     int page = 1,
@@ -103,9 +40,10 @@ extension WooProductApi on FlutterWooCommerce {
     double? maxPrice,
     WooProductStockStatus? stockStatus,
     bool? useFaker,
+
+    /// 🔥 NEW param for multiple filters
+    List<Map<String, dynamic>>? filters,
   }) async {
-
-
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
@@ -113,50 +51,53 @@ extension WooProductApi on FlutterWooCommerce {
     }
 
     try {
-          final response = await dio.get(
-      _ProductEndpoints.products,
-      queryParameters: _resolveQueryParametersForGettingProducts(
-        context: context,
-        page: page,
-        perPage: perPage,
-        search: search,
-        after: after,
-        before: before,
-        modifiedAfter: modifiedAfter,
-        modifiedBefore: modifiedBefore,
-        datesAreGmt: datesAreGmt,
-        exclude: exclude,
-        include: include,
-        offset: offset,
-        order: order,
-        orderBy: orderBy,
-        parent: parent,
-        parentExclude: parentExclude,
-        slug: slug,
-        status: status,
-        type: type,
-        sku: sku,
-        featured: featured,
-        category: category,
-        tag: tag,
-        shippingClass: shippingClass,
-        attribute: attribute,
-        attributeTerm: attributeTerm,
-        taxClass: taxClass,
-        onSale: onSale,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        stockStatus: stockStatus,
-      ),
-    );
+      final response = await dio.get(
+        _ProductEndpoints.products,
+        queryParameters: _resolveQueryParametersForGettingProducts(
+          context: context,
+          page: page,
+          perPage: perPage,
+          search: search,
+          after: after,
+          before: before,
+          modifiedAfter: modifiedAfter,
+          modifiedBefore: modifiedBefore,
+          datesAreGmt: datesAreGmt,
+          exclude: exclude,
+          include: include,
+          offset: offset,
+          order: order,
+          orderBy: orderBy,
+          parent: parent,
+          parentExclude: parentExclude,
+          slug: slug,
+          status: status,
+          type: type,
+          sku: sku,
+          featured: featured,
+          category: category,
+          tag: tag,
+          shippingClass: shippingClass,
+          attribute: attribute,
+          attributeTerm: attributeTerm,
+          taxClass: taxClass,
+          onSale: onSale,
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          stockStatus: stockStatus,
+          filters: filters, // 🔥 new
+        ),
+      );
+
       if (response.statusCode != null &&
           response.statusCode! >= 200 &&
           response.statusCode! < 300) {
-       return (response.data as List)
-        .map((item) => WooProduct.fromJson(item))
-        .toList();
+        return (response.data as List)
+            .map((item) => WooProduct.fromJson(item))
+            .toList();
       } else {
-        throw Exception("API call failed with status code: ${response.statusCode}");
+        throw Exception(
+            "API call failed with status code: ${response.statusCode}");
       }
     } on DioException catch (e) {
       final errorMsg = e.response?.data["message"] ?? e.message;
@@ -164,9 +105,6 @@ extension WooProductApi on FlutterWooCommerce {
     } catch (e) {
       throw Exception("Unexpected error in API call: $e");
     }
-    
-
-    
   }
 
   Map<String, dynamic> _resolveQueryParametersForGettingProducts({
@@ -201,6 +139,9 @@ extension WooProductApi on FlutterWooCommerce {
     required double? minPrice,
     required double? maxPrice,
     required WooProductStockStatus? stockStatus,
+
+    /// 🔥 NEW
+    List<Map<String, dynamic>>? filters,
   }) {
     final map = <String, dynamic>{
       'context': context.name,
@@ -211,104 +152,55 @@ extension WooProductApi on FlutterWooCommerce {
       'status': status.name,
     };
 
-    if (search != null) {
-      map['search'] = search;
-    }
-
-    if (after != null) {
-      map['after'] = after.toIso8601String();
-    }
-
-    if (before != null) {
-      map['before'] = before.toIso8601String();
-    }
-
-    if (modifiedAfter != null) {
+    if (search != null) map['search'] = search;
+    if (after != null) map['after'] = after.toIso8601String();
+    if (before != null) map['before'] = before.toIso8601String();
+    if (modifiedAfter != null)
       map['modified_after'] = modifiedAfter.toIso8601String();
-    }
-
-    if (modifiedBefore != null) {
+    if (modifiedBefore != null)
       map['modified_before'] = modifiedBefore.toIso8601String();
-    }
+    if (datesAreGmt != null) map['dates_are_gmt'] = datesAreGmt;
+    if (exclude != null) map['exclude'] = exclude.join(',');
+    if (include != null) map['include'] = include.join(',');
+    if (offset != null) map['offset'] = offset;
+    if (parent != null) map['parent'] = parent.join(',');
+    if (parentExclude != null) map['parent_exclude'] = parentExclude.join(',');
+    if (slug != null) map['slug'] = slug;
+    if (type != null) map['type'] = type.name;
+    if (sku != null) map['sku'] = sku;
+    if (featured != null) map['featured'] = featured;
+    if (category != null) map['category'] = category;
+    if (tag != null) map['tag'] = tag;
+    if (shippingClass != null) map['shipping_class'] = shippingClass;
 
-    if (datesAreGmt != null) {
-      map['dates_are_gmt'] = datesAreGmt;
-    }
+    /// ✅ old style
+    if (attribute != null) map['attribute'] = attribute;
+    if (attributeTerm != null) map['attribute_term'] = attributeTerm;
 
-    if (exclude != null) {
-      map['exclude'] = exclude.join(',');
-    }
+    if (taxClass != null) map['tax_class'] = taxClass;
+    if (onSale != null) map['on_sale'] = onSale;
+    if (minPrice != null) map['min_price'] = minPrice;
+    if (maxPrice != null) map['max_price'] = maxPrice;
+    if (stockStatus != null) map['stock_status'] = stockStatus.name;
 
-    if (include != null) {
-      map['include'] = include.join(',');
-    }
-
-    if (offset != null) {
-      map['offset'] = offset;
-    }
-
-    if (parent != null) {
-      map['parent'] = parent.join(',');
-    }
-
-    if (parentExclude != null) {
-      map['parent_exclude'] = parentExclude.join(',');
-    }
-
-    if (slug != null) {
-      map['slug'] = slug;
-    }
-
-    if (type != null) {
-      map['type'] = type.name;
-    }
-
-    if (sku != null) {
-      map['sku'] = sku;
-    }
-
-    if (featured != null) {
-      map['featured'] = featured;
-    }
-
-    if (category != null) {
-      map['category'] = category;
-    }
-
-    if (tag != null) {
-      map['tag'] = tag;
-    }
-
-    if (shippingClass != null) {
-      map['shipping_class'] = shippingClass;
-    }
-
-    if (attribute != null) {
-      map['attribute'] = attribute;
-    }
-
-    if (attributeTerm != null) {
-      map['attribute_term'] = attributeTerm;
-    }
-
-    if (taxClass != null) {
-      map['tax_class'] = taxClass;
-    }
-
-    if (onSale != null) {
-      map['on_sale'] = onSale;
-    }
-
-    if (minPrice != null) {
-      map['min_price'] = minPrice;
-    }
-
-    if (maxPrice != null) {
-      map['max_price'] = maxPrice;
-    }
-
-    if (stockStatus != null) {
-      map['stock_status'] = stockStatus.name;
+    /// 🔥 new multi-filters
+    if (filters != null && filters.isNotEmpty) {
+      for (int i = 0; i < filters.length; i++) {
+        final filter = filters[i];
+        if (filter['attribute'] != null) {
+          map['filters[$i][attribute]'] = filter['attribute'];
+        }
+        if (filter['attribute_term'] != null) {
+          final term = filter['attribute_term'];
+          if (term is List) {
+            for (int j = 0; j < term.length; j++) {
+              map['filters[$i][attribute_term][$j]'] = term[j];
+            }
+          } else {
+            map['filters[$i][attribute_term]'] = term;
+          }
+        }
+      }
     }
 
     return map;
@@ -322,14 +214,14 @@ extension WooProductApi on FlutterWooCommerce {
     }
 
     try {
-      final response = await dio.get(
-        _ProductEndpoints.singleProduct(id),
-      );
+      final response = await dio.get(_ProductEndpoints.singleProduct(id));
       if (response.statusCode != null &&
           response.statusCode! >= 200 &&
           response.statusCode! < 300) {
-return WooProduct.fromJson(response.data);      } else {
-        throw Exception("API call failed with status code: ${response.statusCode}");
+        return WooProduct.fromJson(response.data);
+      } else {
+        throw Exception(
+            "API call failed with status code: ${response.statusCode}");
       }
     } on DioException catch (e) {
       final errorMsg = e.response?.data["message"] ?? e.message;
@@ -337,22 +229,13 @@ return WooProduct.fromJson(response.data);      } else {
     } catch (e) {
       throw Exception("Unexpected error in API call: $e");
     }
-    
-
-    
   }
 
-
-
-  /// gets a product with related products
-  ///
-  /// [product] the product that you want to get it's related products
-  ///
-  /// [types] the types that you want to get for [product]
-  Future<WooProductWithChildrens> getProductWithOptions(
-      {required WooProduct product,
-      required List<WooProductFilterWithType> types,
-      bool? useFaker}) async {
+  Future<WooProductWithChildrens> getProductWithOptions({
+    required WooProduct product,
+    required List<WooProductFilterWithType> types,
+    bool? useFaker,
+  }) async {
     final isUsingFaker = useFaker ?? this.useFaker;
 
     if (isUsingFaker) {
@@ -360,16 +243,19 @@ return WooProduct.fromJson(response.data);      } else {
     }
 
     try {
-      final response = await dio.get(_ProductEndpoints.products,
-      queryParameters: _resolveQueryParametersForGettingProductWithOption(types, product));
+      final response = await dio.get(
+        _ProductEndpoints.products,
+        queryParameters:
+            _resolveQueryParametersForGettingProductWithOption(types, product),
+      );
       if (response.statusCode != null &&
           response.statusCode! >= 200 &&
           response.statusCode! < 300) {
-        
         return WooProductWithChildrens.fromData(
             response.data as List<Map<String, dynamic>>, product);
       } else {
-        throw Exception("API call failed with status code: ${response.statusCode}");
+        throw Exception(
+            "API call failed with status code: ${response.statusCode}");
       }
     } on DioException catch (e) {
       final errorMsg = e.response?.data["message"] ?? e.message;
@@ -377,11 +263,7 @@ return WooProduct.fromJson(response.data);      } else {
     } catch (e) {
       throw Exception("Unexpected error in API call: $e");
     }
-    
-
   }
-
-
 
   Map<String, dynamic> _resolveQueryParametersForGettingProductWithOption(
       List<WooProductFilterWithType> options, WooProduct product) {
