@@ -412,7 +412,7 @@ class WooProduct {
         priceHtml: FakeHelper.word(),
         onSale: FakeHelper.boolean(),
         purchasable: FakeHelper.boolean(),
-        totalSales: FakeHelper.integer(),
+        // totalSales: FakeHelper.integer(),
         virtual: FakeHelper.boolean(),
         downloadable: FakeHelper.boolean(),
         downloads: List.generate(3, (index) => WooProductDownload.fake()),
