@@ -119,8 +119,8 @@ class WooProduct {
   final bool? purchasable;
 
   /// Amount of sales.
-  @JsonKey(name: 'total_sales')
-  final int? totalSales;
+  // @JsonKey(name: 'total_sales')
+  // final int? totalSales;
 
   /// If the product is virtual. Default is false.
   @JsonKey(name: 'virtual')
