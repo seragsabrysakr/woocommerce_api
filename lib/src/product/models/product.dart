@@ -317,7 +317,7 @@ class WooProduct {
     this.priceHtml,
     this.onSale,
     this.purchasable,
-    this.totalSales,
+    // this.totalSales,
     this.virtual,
     this.downloadable,
     this.downloads,
