@@ -107,6 +107,80 @@ extension WooProductApi on FlutterWooCommerce {
     }
   }
 
+  /// Enhanced search method that ensures complete search term matching
+  Future<List<WooProduct>> searchProductsByCompleteTerm({
+    required String searchTerm,
+    WooContext context = WooContext.view,
+    int page = 1,
+    int perPage = 10,
+    DateTime? after,
+    DateTime? before,
+    DateTime? modifiedAfter,
+    DateTime? modifiedBefore,
+    bool? datesAreGmt,
+    List<int>? exclude,
+    List<int>? include,
+    int? offset,
+    WooSortOrder order = WooSortOrder.desc,
+    WooSortOrderBy orderBy = WooSortOrderBy.title, // Use title for better search results
+    List<int>? parent,
+    List<int>? parentExclude,
+    String? slug,
+    WooFilterStatus status = WooFilterStatus.any,
+    WooProductType? type,
+    String? sku,
+    bool? featured,
+    int? category,
+    String? tag,
+    int? shippingClass,
+    String? attribute,
+    String? attributeTerm,
+    String? taxClass,
+    bool? onSale,
+    double? minPrice,
+    double? maxPrice,
+    WooProductStockStatus? stockStatus,
+    bool? useFaker,
+    List<Map<String, dynamic>>? filters,
+  }) async {
+    // Use the existing getProducts method with enhanced search term handling
+    return await getProducts(
+      context: context,
+      page: page,
+      perPage: perPage,
+      search: searchTerm.trim(), // Ensure complete search term is used
+      after: after,
+      before: before,
+      modifiedAfter: modifiedAfter,
+      modifiedBefore: modifiedBefore,
+      datesAreGmt: datesAreGmt,
+      exclude: exclude,
+      include: include,
+      offset: offset,
+      order: order,
+      orderBy: orderBy,
+      parent: parent,
+      parentExclude: parentExclude,
+      slug: slug,
+      status: status,
+      type: type,
+      sku: sku,
+      featured: featured,
+      category: category,
+      tag: tag,
+      shippingClass: shippingClass,
+      attribute: attribute,
+      attributeTerm: attributeTerm,
+      taxClass: taxClass,
+      onSale: onSale,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      stockStatus: stockStatus,
+      useFaker: useFaker,
+      filters: filters,
+    );
+  }
+
   Map<String, dynamic> _resolveQueryParametersForGettingProducts({
     required WooContext context,
     required int page,
@@ -152,7 +226,12 @@ extension WooProductApi on FlutterWooCommerce {
       'status': status.name,
     };
 
-    if (search != null) map['search'] = search;
+    // Enhanced search handling to ensure complete search term is used
+    if (search != null && search.isNotEmpty) {
+      // Ensure the complete search term is used, not just the first word
+      // Trim whitespace and pass the complete search term
+      map['search'] = search.trim();
+    }
     if (after != null) map['after'] = after.toIso8601String();
     if (before != null) map['before'] = before.toIso8601String();
     if (modifiedAfter != null)

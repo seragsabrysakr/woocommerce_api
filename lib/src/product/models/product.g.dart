@@ -49,7 +49,6 @@ WooProduct _$WooProductFromJson(Map<String, dynamic> json) => WooProduct(
       priceHtml: json['price_html'] as String?,
       onSale: json['on_sale'] as bool?,
       purchasable: json['purchasable'] as bool?,
-    //   totalSales: (json['total_sales'] as num?)?.toInt(),
       virtual: json['virtual'] as bool?,
       downloadable: json['downloadable'] as bool?,
       downloads: (json['downloads'] as List<dynamic>?)
@@ -162,7 +161,6 @@ Map<String, dynamic> _$WooProductToJson(WooProduct instance) =>
       'price_html': instance.priceHtml,
       'on_sale': instance.onSale,
       'purchasable': instance.purchasable,
-    //   'total_sales': instance.totalSales,
       'virtual': instance.virtual,
       'downloadable': instance.downloadable,
       'downloads': instance.downloads,
@@ -214,6 +212,7 @@ const _$WooProductTypeEnumMap = {
   WooProductType.grouped: 'grouped',
   WooProductType.external: 'external',
   WooProductType.variable: 'variable',
+  WooProductType.bundle: 'bundle',
 };
 
 const _$WooProductStatusEnumMap = {

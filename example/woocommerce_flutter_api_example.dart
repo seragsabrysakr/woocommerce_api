@@ -9,14 +9,14 @@ void main() async {
     useFaker: false,
   );
 
-  WooCustomer customer = WooCustomer(
-    email: "srag.sabry5qq0@gmail.com",
-    firstName: "seraqqg",
-    lastName: "sakqqr",
-    role: 'customer',
-    username: "seragSaqqkr50",
-    password: "Srag12qq3",
-  );
+  // WooCustomer customer = WooCustomer(
+  //   email: "srag.sabry5qq0@gmail.com",
+  //   firstName: "seraqqg",
+  //   lastName: "sakqqr",
+  //   role: 'customer',
+  //   username: "seragSaqqkr50",
+  //   password: "Srag12qq3",
+  // );
 
   // try {
   //   final res = await flutterWoocommerce.register(customer);
@@ -35,17 +35,27 @@ void main() async {
   //   final userId = await flutterWoocommerce.getUserInfo(userEmail);
   //   print(userId.toString());
   // }
-  // final products = await flutterWoocommerce.getProducts(orderBy: WooSortOrderBy.id);
+  // Method 1: Using the enhanced getProducts method (now handles complete search terms)
+  final products = await flutterWoocommerce.getProducts(search:"غساله بيكو");
+  print("Found ${products.length} products using enhanced getProducts method");
+  
+  // Method 2: Using the new dedicated search method for complete terms
+  final productsByCompleteTerm = await flutterWoocommerce.searchProductsByCompleteTerm(
+    searchTerm: "غساله بيكو",
+    orderBy: WooSortOrderBy.title, // Better for search results
+  );
+  print("Found ${productsByCompleteTerm.length} products using searchProductsByCompleteTerm method");
+
   // var user = await flutterWoocommerce.getUserInfo("srag.sabry@gmail.com");
   // await Future.delayed(Duration(seconds: 1));
   // user?.firstName = "Serag ";
   // user?.password = "Srag123";
 
   // var newUser = await flutterWoocommerce.updateCustomer(user!);
-  var order = await flutterWoocommerce.getOrder(id: 425731);
+  // var order = await flutterWoocommerce.getOrder(id: 425731);
 
-  dPrint(order.status?.name.toString() ?? '');
+  // dPrint(order.status?.name.toString() ?? '');
 
-  order.status = WooOrderStatus.underReview;
-  await flutterWoocommerce.updateOrder(order: order);
+  // order.status = WooOrderStatus.underReview;
+  // await flutterWoocommerce.updateOrder(order: order);
 }

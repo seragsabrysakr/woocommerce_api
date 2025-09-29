@@ -4,7 +4,8 @@ enum WooProductType {
   simple,
   grouped,
   external,
-  variable;
+  variable,
+  bundle;
 
   static WooProductType fake() {
     return values[Faker().randomGenerator.integer(values.length - 1)];
@@ -14,16 +15,19 @@ enum WooProductType {
     if (type == 'simple') {
       return WooProductType.simple;
     }
-    if (type == 'grouped') {
+    else if (type == 'grouped') {
       return WooProductType.grouped;
     }
-    if (type == 'external') {
+  else  if (type == 'external') {
       return WooProductType.external;
     }
-    if (type == 'variable') {
+    else if (type == 'variable') {
       return WooProductType.variable;
     }
-    return WooProductType.simple;
+   else {
+      return WooProductType.bundle;
+    }
+   
   }
 
   @override
@@ -37,6 +41,8 @@ enum WooProductType {
         return 'external';
       case WooProductType.variable:
         return 'variable';
+      case WooProductType.bundle:
+        return 'bundle';
     }
   }
 }
