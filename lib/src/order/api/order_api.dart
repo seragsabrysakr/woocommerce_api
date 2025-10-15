@@ -120,7 +120,7 @@ extension WooOrderApi on FlutterWooCommerce {
     }
   }
 
-  Map<String, dynamic> _resolveQueryParametersForGettingOrders({
+  Map<String, dynamic>_resolveQueryParametersForGettingOrders({
     required WooContext context,
     required int page,
     required int perPage,
@@ -148,7 +148,7 @@ extension WooOrderApi on FlutterWooCommerce {
       'per_page': perPage,
       'order': order.name,
       'orderby': orderBy.name,
-      'status': status.map((item) => item.name).join(','),
+      'status': status.map((item) =>WooOrderStatus.toValue(item)).join(','),
     };
 
     if (search != null) {

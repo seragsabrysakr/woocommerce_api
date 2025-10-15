@@ -36,15 +36,18 @@ void main() async {
   //   print(userId.toString());
   // }
   // Method 1: Using the enhanced getProducts method (now handles complete search terms)
-  final products = await flutterWoocommerce.getProducts(search:"غساله بيكو");
-  print("Found ${products.length} products using enhanced getProducts method");
-  
+  final products =
+      await flutterWoocommerce.getOrders(status: [WooOrderStatus.underReview]);
+  print("Found ${products.length} products using enhanced getOrders method");
+
   // Method 2: Using the new dedicated search method for complete terms
-  final productsByCompleteTerm = await flutterWoocommerce.searchProductsByCompleteTerm(
-    searchTerm: "غساله بيكو",
-    orderBy: WooSortOrderBy.title, // Better for search results
-  );
-  print("Found ${productsByCompleteTerm.length} products using searchProductsByCompleteTerm method");
+  // final productsByCompleteTerm =
+  //     await flutterWoocommerce.searchProductsByCompleteTerm(
+  //   searchTerm: "غساله بيكو",
+  //   orderBy: WooSortOrderBy.title, // Better for search results
+  // );
+  // print(
+  //     "Found ${productsByCompleteTerm.length} products using searchProductsByCompleteTerm method");
 
   // var user = await flutterWoocommerce.getUserInfo("srag.sabry@gmail.com");
   // await Future.delayed(Duration(seconds: 1));
